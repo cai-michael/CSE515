@@ -1,0 +1,251 @@
+test1.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	9	|	1.24042
+2	|	test5	|	1.60249
+3	|	42	|	1.61597
+4	|	40	|	1.64219
+5	|	test6	|	1.66843
+6	|	test3	|	1.67375
+7	|	36	|	1.67791
+8	|	test4	|	1.69637
+9	|	4	|	1.69831
+10	|	1	|	1.71607
+
+test1.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	9	|	0.94996
+2	|	test3	|	1.45204
+3	|	test4	|	1.45687
+4	|	3	|	1.50276
+5	|	test6	|	1.50650
+6	|	16	|	1.50684
+7	|	47	|	1.53517
+8	|	40	|	1.54489
+9	|	34	|	1.55169
+10	|	13	|	1.56378
+
+test1.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	9	|	0.66598
+2	|	test3	|	0.92531
+3	|	test4	|	0.92531
+4	|	test5	|	0.92531
+5	|	test6	|	0.98206
+6	|	16	|	0.99916
+7	|	40	|	1.04161
+8	|	35	|	1.05600
+9	|	47	|	1.05898
+10	|	34	|	1.08978
+
+test2.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	33	|	1.87563
+2	|	42	|	1.88594
+3	|	test5	|	1.91943
+4	|	51	|	1.92077
+5	|	test1	|	1.93470
+6	|	37	|	1.93622
+7	|	test6	|	1.96366
+8	|	18	|	1.96506
+9	|	11	|	1.98331
+10	|	test3	|	1.98610
+
+test2.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	7	|	1.89367
+2	|	41	|	1.94977
+3	|	5	|	1.99052
+4	|	37	|	2.03731
+5	|	35	|	2.08625
+6	|	8	|	2.11790
+7	|	18	|	2.12908
+8	|	43	|	2.14678
+9	|	39	|	2.15149
+10	|	21	|	2.17453
+
+test2.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	5	|	1.51593
+2	|	41	|	1.51983
+3	|	37	|	1.52149
+4	|	35	|	1.53312
+5	|	7	|	1.56531
+6	|	18	|	1.57341
+7	|	43	|	1.61505
+8	|	39	|	1.62210
+9	|	10	|	1.63407
+10	|	8	|	1.63687
+
+test3.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.60009
+2	|	test4	|	0.74432
+3	|	test5	|	0.74432
+4	|	44	|	1.36833
+5	|	36	|	1.49422
+6	|	13	|	1.51727
+7	|	38	|	1.52383
+8	|	11	|	1.54884
+9	|	40	|	1.56855
+10	|	7	|	1.59947
+
+test3.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.72910
+2	|	test4	|	0.84911
+3	|	test5	|	0.96477
+4	|	13	|	1.05583
+5	|	16	|	1.05781
+6	|	3	|	1.14618
+7	|	47	|	1.19614
+8	|	40	|	1.20370
+9	|	44	|	1.21616
+10	|	21	|	1.24676
+
+test3.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test4	|	0.00000
+2	|	test5	|	0.00000
+3	|	test6	|	0.47669
+4	|	35	|	0.62486
+5	|	16	|	0.65198
+6	|	13	|	0.77204
+7	|	40	|	0.80607
+8	|	44	|	0.81660
+9	|	47	|	0.81812
+10	|	10	|	0.84295
+
+test4.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.60009
+2	|	test3	|	0.74432
+3	|	test5	|	0.74432
+4	|	44	|	1.34019
+5	|	36	|	1.49236
+6	|	38	|	1.50103
+7	|	13	|	1.52171
+8	|	11	|	1.55597
+9	|	7	|	1.59101
+10	|	40	|	1.59494
+
+test4.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.72812
+2	|	test3	|	0.84911
+3	|	test5	|	0.96231
+4	|	16	|	1.05866
+5	|	13	|	1.06707
+6	|	47	|	1.14896
+7	|	3	|	1.17262
+8	|	44	|	1.18253
+9	|	21	|	1.20791
+10	|	40	|	1.21859
+
+test4.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test3	|	0.00000
+2	|	test5	|	0.00000
+3	|	test6	|	0.47669
+4	|	35	|	0.62486
+5	|	16	|	0.65198
+6	|	13	|	0.77204
+7	|	40	|	0.80607
+8	|	44	|	0.81660
+9	|	47	|	0.81812
+10	|	10	|	0.84295
+
+test5.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.62275
+2	|	test3	|	0.74432
+3	|	test4	|	0.74432
+4	|	44	|	1.29148
+5	|	36	|	1.41813
+6	|	11	|	1.45095
+7	|	38	|	1.46639
+8	|	1	|	1.48492
+9	|	13	|	1.51848
+10	|	39	|	1.52087
+
+test5.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test6	|	0.80616
+2	|	test4	|	0.96231
+3	|	test3	|	0.96477
+4	|	13	|	1.25060
+5	|	16	|	1.25140
+6	|	3	|	1.32110
+7	|	44	|	1.35916
+8	|	47	|	1.36168
+9	|	40	|	1.38568
+10	|	21	|	1.41051
+
+test5.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test3	|	0.00000
+2	|	test4	|	0.00000
+3	|	test6	|	0.47669
+4	|	35	|	0.62486
+5	|	16	|	0.65198
+6	|	13	|	0.77204
+7	|	40	|	0.80607
+8	|	44	|	0.81660
+9	|	47	|	0.81812
+10	|	10	|	0.84295
+
+test6.csv TF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test3	|	0.60009
+2	|	test4	|	0.60009
+3	|	test5	|	0.62275
+4	|	44	|	1.32124
+5	|	36	|	1.47368
+6	|	38	|	1.48658
+7	|	11	|	1.51081
+8	|	13	|	1.52101
+9	|	1	|	1.56308
+10	|	40	|	1.57214
+
+test6.csv TF-IDF
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test4	|	0.72812
+2	|	test3	|	0.72910
+3	|	test5	|	0.80616
+4	|	16	|	1.09985
+5	|	13	|	1.11975
+6	|	3	|	1.20384
+7	|	47	|	1.22251
+8	|	44	|	1.25116
+9	|	40	|	1.26529
+10	|	21	|	1.28882
+
+test6.csv TF-IDF2
+These are the most similar gestures to your choice:
+Rank	|	Gesture	|	Similarity Score
+1	|	test3	|	0.47669
+2	|	test4	|	0.47669
+3	|	test5	|	0.47669
+4	|	16	|	0.70875
+5	|	35	|	0.71787
+6	|	13	|	0.82404
+7	|	40	|	0.84992
+8	|	47	|	0.86002
+9	|	10	|	0.86849
+10	|	44	|	0.87752
