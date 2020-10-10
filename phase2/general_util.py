@@ -25,16 +25,32 @@ def read_nonempty_lines(file_path):
 
 #reads a csv file and returns a list of lists of floats
 def read_csv(file_path):
-	result = read_nonempty_lines(file_path) #get lines
+	result = read_nonempty_lines(file_path)
 	result = list(map(lambda a : list(map(float, a.split(','))), result)) #split on commas and convert to floats
 	return result
 
 
 
-#reads a wrd file and returns ???
+#reads a wrd file and returns a list of (component, sensor, winq) tuples
 def read_wrd(file_path):
-	print('read_wrd NOT IMPLEMENTED')
-	return []
+	lines = read_nonempty_lines(file_path)
+	
+	component = '?'
+	sensor = -1
+	result = []
+	for line in lines:
+		if(line[0] == '#'): #command
+			line = line[1:len(line)].split(' ')
+			if(line[0] == 'component'):
+				component = line[-1]
+			elif(line[0] == 'sensor'):
+				sensor = int(line[-1])
+		else:
+			line = line.split(' ')
+			line = line[-1] #take only the winq
+			result.append((component, sensor, line))
+	
+	return result
 
 
 
