@@ -2,6 +2,7 @@ import os
 import platform
 
 WRD_FOLDER = 'wrd_data'
+VECTOR_FOLDER = 'vector_data'
 COMPONENTS = ['X','Y','Z','W']
 SLASH = '\\' if ('Windows' in platform.system()) else '/'
 
@@ -90,7 +91,20 @@ def read_wrd_numerical(file_path):
 
 #reads a txt file of gesture vectors and returns ???
 def read_vectors_txt(file_path):
-	print('read_vectors_txt NOT IMPLEMENTED')
-	return []
+	lines = read_nonempty_lines(file_path)
+	
+	result = {}
+	key = '?'
+	for line in lines:
+		if(line[0] == '#'): #key
+			line = line[1:len(line)]
+			key = line
+			result[key] = {}
+		else:
+			line = line.split(':')
+			line[0] = int(line[0])
+			line[1] = float(line[1])
+			result[key][line[0]] = line[1]
+	return result
 
 

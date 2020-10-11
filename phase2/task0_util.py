@@ -88,3 +88,19 @@ def get_windows(data, w, s):
 	return result
 
 
+
+#takes a list of winq values and returns a dictionary of the form {<winq>:<tf_value>}
+#the tf_value for a given winq is computed as: (number of instances of winq in 'data') / (length of 'data')
+#this is the k/N formula
+def get_tf_vector(data):
+	result = {}
+	for winq in data:
+		if(winq in result):
+			result[winq] += 1
+		else:
+			result[winq] = 1
+	for winq in result:
+		result[winq] /= len(data)
+	return result
+
+
