@@ -89,18 +89,36 @@ def get_windows(data, w, s):
 
 
 
-#takes a list of winq values and returns a dictionary of the form {<winq>:<tf_value>}
-#the tf_value for a given winq is computed as: (number of instances of winq in 'data') / (length of 'data')
+#creates a list of every possible word (every possible dimension in a gesture vector)
+def get_possible_words(components, sensors, resolution):
+	result = []
+	for c in components:
+		for s in sensors:
+			for i in range(2*resolution):
+				result.append(c+';'+str(s)+';'+str(i))
+	return result
+
+#takes a list of words and returns a dictionary of the form {<word>:<tf_value>}
+#the tf_value for a given word is computed as: (number of instances of word in 'data') / (length of 'data')
 #this is the k/N formula
-def get_tf_vector(data):
+#the word_list is used for determining the full range of possible words (i.e. the dimension of the tf vector)
+def get_tf_vector(word_list, data):
 	result = {}
-	for winq in data:
-		if(winq in result):
-			result[winq] += 1
+	for word in word_list:
+		result[word] = data.count(word) / len(data)
+	return result
+
+#multiplies together the tf and idf vectors to create a tfidf vector
+def get_tfidf_vector(tf_vector, idf_vector):
+	result = {}
+	for word in tf_vector:
+		if(idf_vector[word] == math.inf):
+			result[word] = 0.0
 		else:
-			result[winq] = 1
-	for winq in result:
-		result[winq] /= len(data)
+			result[word] = tf_vector[word] * idf_vector[word]
+		
+		if(result[word] == -0.0): #correct pointless -0.0 values
+			result[word] = 0.0
 	return result
 
 

@@ -1,9 +1,19 @@
 import os
 import platform
 
+COMPONENTS = ['X','Y','Z','W']
+
 WRD_FOLDER = 'wrd_data'
 VECTOR_FOLDER = 'vector_data'
-COMPONENTS = ['X','Y','Z','W']
+
+#user_setting information
+SAVE_DATA_FILE = 'user_settings'
+CSV_FOLDER = None
+R = None
+W = None
+S = None
+
+#OS-relative slash for file system navigation
 SLASH = '\\' if ('Windows' in platform.system()) else '/'
 
 
@@ -26,6 +36,41 @@ def read_nonempty_lines(file_path):
 			result.append(q)
 	file.close()
 	return result
+
+
+
+#saves user choices for later reference
+def save_user_settings():
+	file = open(SAVE_DATA_FILE, 'w')
+	file.write('CSV_FOLDER: '+CSV_FOLDER+'\n')
+	file.write('R: '+str(R)+'\n')
+	file.write('W: '+str(W)+'\n')
+	file.write('S: '+str(S)+'\n')
+	file.close()
+
+#loads the data from SAVE_DATA_FILE
+def load_user_settings():
+	global CSV_FOLDER, R, W, S
+	
+	if(not os.path.exists(SAVE_DATA_FILE)):
+		print('Error: could not find '+SAVE_DATA_FILE)
+		quit()
+	
+	lines = read_nonempty_lines(SAVE_DATA_FILE)
+	for line in lines:
+		if(': ' in line):
+			ind = line.index(': ')
+			variable = line[0:ind]
+			value = line[ind+2:len(line)]
+			if(variable == 'CSV_FOLDER'):
+				CSV_FOLDER = value
+			elif(variable == 'R'):
+				R = int(value)
+				print('updated R to '+str(R))
+			elif(variable == 'W'):
+				W = int(value)
+			elif(variable == 'S'):
+				S = int(value)
 
 
 
@@ -89,22 +134,15 @@ def read_wrd_numerical(file_path):
 
 
 
-#reads a txt file of gesture vectors and returns ???
-def read_vectors_txt(file_path):
+#reads a txt storing a gesture vector and returns a dictionary {<word>:<value>}
+#words are represented as '<component>;<sensor>;<winq>' strings
+def read_vector_txt(file_path):
 	lines = read_nonempty_lines(file_path)
 	
 	result = {}
-	key = '?'
 	for line in lines:
-		if(line[0] == '#'): #key
-			line = line[1:len(line)]
-			key = line
-			result[key] = {}
-		else:
-			line = line.split(':')
-			line[0] = int(line[0])
-			line[1] = float(line[1])
-			result[key][line[0]] = line[1]
+		line = line.split(' ')
+		result[line[0]] = float(line[1])
 	return result
 
 

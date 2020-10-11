@@ -1,10 +1,14 @@
 import os
-from general_util import *
+import math
+import general_util as util
 from task0_util import *
 
+SENSORS = []
+util.load_user_settings()
+
 working_dir = os.getcwd()
-wrd_dir = working_dir+SLASH+WRD_FOLDER
-wrd_files = get_files(wrd_dir, '.wrd')
+wrd_dir = working_dir + util.SLASH + util.WRD_FOLDER
+wrd_files = util.get_files(wrd_dir, '.wrd')
 
 print('Found the following wrd files:')
 for f in wrd_files:
@@ -16,46 +20,69 @@ print()
 print('Reading wrd data...\n')
 data = {}
 for f in wrd_files:
-	contents = read_wrd_general(working_dir+SLASH+WRD_FOLDER+SLASH+f)
-	for component in contents:
-		for sensor in contents[component]:
-			contents[component][sensor] = list(map(lambda a : a[1], contents[component][sensor]['series']))
-			#this reshapes the data so that it is a dictionary {<component>:<component_data>}
-			#<component_data> is a dictionary {<sensor_id>:<series_data>}
-			#<series_data> is a list of winq values
-	data[f[0:-4]] = contents
+	file_name = f[0:-4]
+	data[file_name] = util.read_wrd_symbolic(working_dir+util.SLASH+util.WRD_FOLDER+util.SLASH+f) #read tuple list
+	
+	if(len(SENSORS) == 0):
+		for q in data[file_name]:
+			if(not q[1] in SENSORS):
+				SENSORS.append(q[1])
+	
+	#convert tuples to strings
+	data[file_name] = list(map(lambda a : a[0]+';'+str(a[1])+';'+str(a[2]), data[file_name]))
 
 
 
 #make sure the output directory exists
-if(not VECTOR_FOLDER in os.listdir(working_dir)):
-	os.mkdir(working_dir+SLASH+VECTOR_FOLDER)
+if(not util.VECTOR_FOLDER in os.listdir(working_dir)):
+	os.mkdir(working_dir+util.SLASH+util.VECTOR_FOLDER)
+
+
+
+#find all possible words
+WORD_LIST = get_possible_words(util.COMPONENTS, SENSORS, util.R)
 
 
 
 print('Computing TF vectors...')
 tf = {}
 for f in data:
-	tf[f] = {}
-	for component in data[f]:
-		for sensor in data[f][component]:
-			#generate tf_vector for (component, sensor) pair of file f
-			tf[f][component+', '+str(sensor)] = get_tf_vector(data[f][component][sensor])
+	tf[f] = get_tf_vector(WORD_LIST, data[f])
 	
-	output_file = open(working_dir+SLASH+VECTOR_FOLDER+SLASH+'tf_vectors_'+f+'.txt','w')
-	for key in tf[f]:
-		output_file.write('#'+key+'\n')
-		for winq in tf[f][key]:
-			output_file.write(str(winq)+':'+str(tf[f][key][winq])+'\n')
-		output_file.write('\n')
+	#write to output_file
+	output_file = open(working_dir+util.SLASH+util.VECTOR_FOLDER+util.SLASH+'tf_vectors_'+f+'.txt','w')
+	for word in tf[f]:
+		output_file.write(word+' '+str(tf[f][word])+'\n')
 	output_file.close()
 print('Finished.\n')
 
 
 
-print('Computing TF-IDF vectors...')
-print('NOT IMPLEMENTED')
-quit()
+print('Computing IDF values...')
+idf = {}
+for word in WORD_LIST:
+	idf[word] = 0
+	for f in data:
+		if(word in data[f]):
+			idf[word] += 1 #count files that contain the word -> m
+	if(idf[word] == 0):
+		idf[word] = math.inf
+	else:
+		idf[word] = -math.log(len(data) / idf[word]) #-log(N/m)
 print('Finished.\n')
+
+
+
+print('Computing TF-IDF vectors...')
+tfidf = {}
+for f in data:
+	tfidf[f] = get_tfidf_vector(tf[f], idf)
+	
+	#write to output_file
+	output_file = open(working_dir+util.SLASH+util.VECTOR_FOLDER+util.SLASH+'tfidf_vectors_'+f+'.txt','w')
+	for word in tfidf[f]:
+		output_file.write(word+' '+str(tfidf[f][word])+'\n')
+	output_file.close()
+print('Finished.')
 
 
