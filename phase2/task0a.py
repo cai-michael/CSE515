@@ -1,13 +1,8 @@
 import os
-import platform
 from general_util import *
 from task0_util import *
 
-OUTPUT_FOLDER = 'word_dictionaries'
-COMPONENTS = ['X','Y','Z','W']
-
 working_dir = os.getcwd()
-SLASH = '\\' if ('Windows' in platform.system()) else '/'
 
 
 
@@ -19,7 +14,8 @@ if(len(gesture_dir) > 0):
 		gesture_dir = SLASH + gesture_dir
 gesture_dir = working_dir + gesture_dir
 
-print('Using directory \"'+gesture_dir+'\".\n')
+print('Using directory '+gesture_dir)
+print()
 
 
 
@@ -56,8 +52,8 @@ print()
 
 
 #make sure the output directory exists
-if(not OUTPUT_FOLDER in os.listdir(working_dir)):
-	os.mkdir(working_dir+SLASH+OUTPUT_FOLDER)
+if(not WRD_FOLDER in os.listdir(working_dir)):
+	os.mkdir(working_dir+SLASH+WRD_FOLDER)
 
 
 
@@ -66,11 +62,11 @@ GAUSSIAN_BANDS = get_gaussian_bands(0, 0.25, R)
 
 
 
-#main loop for 0a
+#main loop
 print('Creating .wrd files...')
 for f in data_files: #iterate over data files
 	file_name = f[0:-4]
-	output_file = open(working_dir+SLASH+OUTPUT_FOLDER+SLASH+file_name+'.wrd','w')
+	output_file = open(working_dir+SLASH+WRD_FOLDER+SLASH+file_name+'.wrd','w')
 	
 	for c in COMPONENTS: #iterate over components
 		output_file.write('#component '+c+'\n') #0a-1-a-i
@@ -83,7 +79,7 @@ for f in data_files: #iterate over data files
 			avg = get_average_amplitude(data[sensor])
 			output_file.write('#avg '+str(avg)+'\n') #0a-1-a-ii-B
 			
-			std = get_standard_deviation(data[sensor], avg)
+			std = get_standard_deviation(data[sensor])
 			output_file.write('#std '+str(std)+'\n') #0a-1-a-ii-C
 			
 			data[sensor] = normalize(data[sensor]) #0a-1-a-ii-D
@@ -93,21 +89,14 @@ for f in data_files: #iterate over data files
 			data[sensor] = get_windows(data[sensor], W, S) #0a-1-a-ii-F
 			
 			for h in data[sensor]: #iterate over windows
-				avgq = get_average_amplitude(h) #average amplitude of quantized data
+				avgq = sum(h)/W #average amplitude of quantized data
 				output_file.write(str(avgq)+' ') #0a-1-a-ii-G
 				
-				winq = get_symbolic_quantized_window_descriptor(GAUSSIAN_BANDS, h)
+				winq = get_band_index(GAUSSIAN_BANDS, avgq) #quantization of avgq
+				winq = str(winq)
 				output_file.write(str(winq)+'\n') #0a-1-a-ii-H
 		output_file.write('\n')
 	output_file.close()
-print('Finished.\n')
-
-
-
-#main loop for 0b
-print('Creating .txt vector files...')
-print('NOT IMPLEMENTED')
-quit()
-print('Finished.\n')
+print('Finished.')
 
 

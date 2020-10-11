@@ -1,13 +1,15 @@
 import math
 
-#interpretation: average of the values for a (file,component,sensor)
+#interpretation: max-min of the values for a (file,component,sensor)
+#based on: Q&A from lecture 9/26/20
 def get_average_amplitude(data):
-	return sum(data)/len(data)
+	return max(data)-min(data)
 
 
 
-#interpretation: average of the square distance from 'mean' for a (file,component,sensor)
-def get_standard_deviation(data, mean):
+#interpretation: average of the square distance from the mean for a (file,component,sensor)
+def get_standard_deviation(data):
+	mean = sum(data)/len(data)
 	return sum(map(lambda a : (a - mean)**2, data))/len(data)
 
 
@@ -84,16 +86,5 @@ def get_windows(data, w, s):
 		result.append(data[t:t+w])
 		t += s
 	return result
-
-
-
-#returns a string of the form <n1,n2,...,nk> of band indexes of the window data
-def get_symbolic_quantized_window_descriptor(bands, window):
-	winq = list(map(lambda a : get_band_index(bands, a), window))
-	winq = str(winq)
-	winq = winq[1:-1] #remove brackets
-	winq = winq.replace(' ','') #remove spaces
-	winq = '<'+winq+'>'
-	return winq
 
 
