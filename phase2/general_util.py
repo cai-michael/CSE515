@@ -7,7 +7,7 @@ WRD_FOLDER = 'wrd_data'
 VECTOR_FOLDER = 'vector_data'
 
 #user_setting information
-SAVE_DATA_FILE = 'user_settings'
+SAVE_DATA_FILE = 'user_settings.txt'
 CSV_FOLDER = None
 R = None
 W = None

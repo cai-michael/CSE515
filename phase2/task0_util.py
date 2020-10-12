@@ -112,13 +112,10 @@ def get_tf_vector(word_list, data):
 def get_tfidf_vector(tf_vector, idf_vector):
 	result = {}
 	for word in tf_vector:
-		if(idf_vector[word] == math.inf):
+		if (idf_vector[word] == None):
 			result[word] = 0.0
 		else:
 			result[word] = tf_vector[word] * idf_vector[word]
-		
-		if(result[word] == -0.0): #correct pointless -0.0 values
-			result[word] = 0.0
 	return result
 
 

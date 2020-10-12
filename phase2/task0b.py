@@ -21,25 +21,25 @@ print('Reading wrd data...\n')
 data = {}
 for f in wrd_files:
 	file_name = f[0:-4]
-	data[file_name] = util.read_wrd_symbolic(working_dir+util.SLASH+util.WRD_FOLDER+util.SLASH+f) #read tuple list
+	data[file_name] = util.read_wrd_symbolic(working_dir+util.SLASH+util.WRD_FOLDER+util.SLASH+f) # Read tuple list
 	
-	if(len(SENSORS) == 0):
+	if (len(SENSORS) == 0):
 		for q in data[file_name]:
 			if(not q[1] in SENSORS):
 				SENSORS.append(q[1])
 	
-	#convert tuples to strings
+	# Convert tuples to strings
 	data[file_name] = list(map(lambda a : a[0]+';'+str(a[1])+';'+str(a[2]), data[file_name]))
 
 
 
-#make sure the output directory exists
-if(not util.VECTOR_FOLDER in os.listdir(working_dir)):
+# Make sure the output directory exists
+if (not util.VECTOR_FOLDER in os.listdir(working_dir)):
 	os.mkdir(working_dir+util.SLASH+util.VECTOR_FOLDER)
 
 
 
-#find all possible words
+# Find all possible words
 WORD_LIST = get_possible_words(util.COMPONENTS, SENSORS, util.R)
 
 
@@ -64,11 +64,11 @@ for word in WORD_LIST:
 	idf[word] = 0
 	for f in data:
 		if(word in data[f]):
-			idf[word] += 1 #count files that contain the word -> m
+			idf[word] += 1 # Count files that contain the word -> m
 	if(idf[word] == 0):
-		idf[word] = math.inf
+		idf[word] = None
 	else:
-		idf[word] = -math.log(len(data) / idf[word]) #-log(N/m)
+		idf[word] = math.log(len(data) / idf[word]) # log(N/m)
 print('Finished.\n')
 
 
