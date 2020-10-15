@@ -77,19 +77,28 @@ def cost_delete(val):
 def cost_replace(val1, val2):
     return 1 #abs(val1 - val2)
 
-
+"""
+Recursively determines the edit distance between two time series P and Q.
+i - current prefix index of P
+j - current prefix index of Q
+D - the memoization matrix where [0][0] is the start of both strings and [i][j] are the ends
+"""
 def edit_dist_aux(P, Q, i, j, D):
+    # Case 1: Accounting for illegal edges
     if i == -1 or j == -1:
         return float('inf')
+    # Case 2: The minimum distance to this prefix is already calculated
     if D[i][j] != -1:
         return D[i][j]
+    # Case 3: There is a match in the strings
     if i > 0 and j > 0 and P[i - 1] == Q[j - 1]:
         dist = edit_dist_aux(P, Q, i - 1, j - 1, D)
         D[i][j] = dist
         return dist
+    # Case 4: There is a mismatch
     dist = min(
         (cost_insert(Q[j - 1]) if j > 0 else float('inf')) + edit_dist_aux(P, Q, i, j - 1, D),
-        (cost_delete(P[i - 1]) if i > 0 else float('inf'))+ edit_dist_aux(P, Q, i - 1, j, D),
+        (cost_delete(P[i - 1]) if i > 0 else float('inf')) + edit_dist_aux(P, Q, i - 1, j, D),
         (cost_replace(P[i - 1], Q[j - 1]) if i > 0 and j > 0 else float('inf')) + edit_dist_aux(P, Q, i - 1, j - 1, D)
     )
     D[i][j] = dist
@@ -98,7 +107,7 @@ def edit_dist_aux(P, Q, i, j, D):
 
 def get_memo(N, M):
     D = []
-    for i in range(N + 1):
+    for _ in range(N + 1):
         D.append([-1] * (M + 1))
     D[0][0] = 0
     return D
@@ -110,7 +119,7 @@ def edit_distance(P, Q):
     M = len(Q)
     D = get_memo(N, M)
     dist = edit_dist_aux(P, Q, N, M, D)
-    return dist, D
+    return dist
 
 
 # Outputs overall edit distance betweeng gesture1 and gesture2
@@ -126,7 +135,7 @@ def gesture_edit_distance(gesture1, gesture2):
         for sensor_id in range(20):
             P = [t[1] for t in wrds1[component][sensor_id]['series']]
             Q = [t[1] for t in wrds2[component][sensor_id]['series']]
-            distance, D = edit_distance(P, Q)
+            distance = edit_distance(P, Q)
             distances.append(distance)
     total_distance = sum(distances)
     return total_distance
@@ -140,7 +149,8 @@ def option6(gesture_file, vector_model):
         distance = gesture_edit_distance(gesture_file, gesture_id)
         distances.append((gesture_id, distance))
     distances.sort(key=lambda pair: pair[1])
-    top10 = distances[0:10]
+    # Return Top 10 without our original gesture
+    top10 = distances[1:11]
     return top10
 
 
