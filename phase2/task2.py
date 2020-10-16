@@ -155,30 +155,23 @@ def option6(gesture_file, vector_model):
 
 
 # Option 7 (DTW)
-def dtw_aux(P, Q, i, j, D):
-    if D[i][j] != -2:
-        return D[i][j]
-    if P[i - 1] == Q[j - 1]:
-        dist = dtw_aux(P, Q, i - 1, j - 1, D)
-        D[i][j] = dist
-        return dist
-    dist = abs(P[i - 1] - Q[j - 1]) + min(
-        dtw_aux(P, Q, i, j - 1, D),
-        dtw_aux(P, Q, i - 1, j, D),
-        dtw_aux(P, Q, i - 1, j - 1, D)
-    )
-    D[i][j] = dist
+# Utilizes the O(N * M) solution to determine the least distance in dynamic time warping
+def dtw_aux(P, Q, N, M, D):
+    for i in range(1, N + 1):
+        for j in range(1, M + 1):
+            D[i][j] = abs(P[i - 1] - Q[j - 1]) + min(D[i-1][j-1], D[i][j-1], D[i-1][j]) 
+    dist = D[N][M]
     return dist
 
-
+# Initialize Memoization Matrix with inf on the edges and None's in the center.
 def get_dtw_memo(P, Q, N, M):
     D = []
     for i in range(N + 1):
-        D.append([-2] * (M + 1))
+        D.append([None] * (M + 1))
     for i in range(1, N + 1):
-        D[i][0] = abs(P[i - 1])
+        D[i][0] = float('inf')
     for j in range(1, M + 1):
-        D[0][j] = abs(Q[j - 1])
+        D[0][j] = float('inf')
     D[0][0] = 0
     return D
 
