@@ -105,7 +105,7 @@ def get_possible_words(components, sensors, resolution):
 def get_tf_vector(word_list, data):
 	result = {}
 	for word in word_list:
-		result[word] = data.count(word) / len(data)
+		result[word] = float(data.count(word)) / float(len(data))
 	return result
 
 #multiplies together the tf and idf vectors to create a tfidf vector
