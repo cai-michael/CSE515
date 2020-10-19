@@ -40,8 +40,7 @@ def option1(gesture_id, vector_model):
     gesture_ids = list_gesture_ids()
     similarities = [(gesture_id2, dot_product_gesture_sim(gesture_id, gesture_id2, vector_model)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
-    top10 = similarities[0:10]
-    return top10
+    return similarities
 
 
 # Option 2 (PCA)
@@ -149,9 +148,7 @@ def option6(gesture_file, vector_model):
         distance = gesture_edit_distance(gesture_file, gesture_id)
         distances.append((gesture_id, distance))
     distances.sort(key=lambda pair: pair[1])
-    # Return Top 10 without our original gesture
-    top10 = distances[1:11]
-    return top10
+    return distances
 
 
 # Option 7 (DTW)
@@ -206,8 +203,7 @@ def option7(gesture_file, vector_model):
         distance = gesture_dtw_distance(gesture_file, gesture_id)
         distances.append((gesture_id, distance))
     distances.sort(key=lambda pair: pair[1])
-    top10 = distances[0:10]
-    return top10
+    return distances
 
 
 # Options map mapping option number to a tuple
@@ -218,10 +214,10 @@ def option7(gesture_file, vector_model):
 # is whether vectors were compared using similarity or distance
 options = {
     1: ('Dot product similarity', option1, 'similarity'),
-    2: ('PCA', option2, '?'),
-    3: ('SVD', option3, '?'),
-    4: ('NMF', option4, '?'),
-    5: ('LDA', option5, '?'),
+    2: ('PCA', option2, 'similarity'),
+    3: ('SVD', option3, 'similarity'),
+    4: ('NMF', option4, 'similarity'),
+    5: ('LDA', option5, 'similarity'),
     6: ('Edit distance', option6, 'distance'),
     7: ('DTW distance', option7, 'distance')
 }
@@ -231,7 +227,7 @@ options = {
 def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: int):
     if option not in options:
         raise ValueError(f'Invalid option')
-    return options[option][1](gesture_file, vector_model)
+    return options[option][1](gesture_file, vector_model)[1:11]
 
 
 # Main
