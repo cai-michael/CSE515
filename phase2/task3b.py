@@ -28,13 +28,13 @@ if __name__ == '__main__':
     
     similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option)
 
-    # Perform SVD
-    print("Found Gesture-Gesture Similarity Matrix Performing SVD")
-    model = decomposition.TruncatedSVD(n_components=p)
-    svdDecomp = model.fit(similarityMatrix)
-
+    # Perform PCA
+    print("Found Gesture-Gesture Similarity Matrix Performing PCA")
+    model = decomposition.PCA(n_components=p)
+    pcaDecomp = model.fit(similarityMatrix)
+    
     # Find top-p principle components
-    basisVectors = svdDecomp.components_
+    basisVectors = pcaDecomp.components_
 
     # Find the contributions of each gesture to each basis vectors
     scores = []
