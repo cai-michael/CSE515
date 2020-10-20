@@ -23,7 +23,9 @@ def createSimilarityMatrix(vector_model, option):
     
     # Convert distances to similarity if they are distances
     if option >= 6:
-        conversion = lambda d: 1 / (1 + d)
+        # Normalize the matrix and subtract from 1 to find similarity
+        maxValue = np.max(similarityMatrix)
+        conversion = lambda d: 1 - (d / maxValue)
         similarityMatrix = conversion(similarityMatrix)
 
     return similarityMatrix, filenames
