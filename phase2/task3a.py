@@ -30,8 +30,24 @@ if __name__ == '__main__':
     # Perform SVD
     u, s, v = np.linalg.svd(similarityMatrix)
 
-    basicVectors = u[:,:p]
+    # Find top-p principle components
+    basisVectors = u[:,:p]
     eigenValues = s[:p]
 
-    # Find top-p principle components
-    print("something")
+    # Find the contributions of each gesture to each basis vectors
+    scores = []
+    for i in range(p):
+        rankedScoresForOneComponent = []
+        latentComponentContributions = basisVectors[:,i]
+        for gesture, contribution in zip(gestureIndexes, latentComponentContributions):
+            rankedScoresForOneComponent.append((gesture, abs(contribution)))
+        rankedScoresForOneComponent.sort(key=lambda pair: pair[1], reverse=True)
+        scores.append(rankedScoresForOneComponent)
+    
+    # Print out results
+    for index, i in enumerate(scores):
+        print(f"Principal Component {index + 1} Similarity Scores:")
+        print("Gesture\t|\tScore")
+        for j in i:
+            print(f'{j[0]}\t|\t{j[1]}')
+        print("\n")
