@@ -30,11 +30,11 @@ if __name__ == '__main__':
 
     # Perform PCA
     print("Found Gesture-Gesture Similarity Matrix Performing PCA")
-    model = decomposition.PCA(n_components=p)
-    pcaDecomp = model.fit(similarityMatrix)
+    model = decomposition.NMF(n_components=p)
+    nmfDecomp = model.fit(similarityMatrix)
     
     # Find top-p principle components
-    basisVectors = pcaDecomp.components_
+    basisVectors = nmfDecomp.components_
 
     # Find the contributions of each gesture to each basis vectors
     scores = []
