@@ -10,7 +10,7 @@ LATENT_SEMANTICS_FOLDER = 'latent_semantics_data'
 # user_setting information
 SAVE_DATA_FILE = 'user_settings.txt'
 CSV_FOLDER = None
-GAUSSIAN_BANDS = None
+GAUSSIAN_BANDS = []
 R = None
 W = None
 S = None
@@ -49,7 +49,7 @@ def save_user_settings():
 
 # loads the data from SAVE_DATA_FILE
 def load_user_settings():
-	global CSV_FOLDER, R, W, S
+	global CSV_FOLDER, R, W, S, GAUSSIAN_BANDS
 	
 	if (not os.path.exists(SAVE_DATA_FILE)):
 		print('Error: could not find ' + SAVE_DATA_FILE)
