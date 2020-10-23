@@ -153,6 +153,7 @@ def gesture_edit_distance(gesture1, gesture2):
 
 
 def option6(gesture_file, vector_model):
+    util.load_user_settings()
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
     for filename in filenames:
