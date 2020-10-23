@@ -10,10 +10,10 @@ LATENT_SEMANTICS_FOLDER = 'latent_semantics_data'
 # user_setting information
 SAVE_DATA_FILE = 'user_settings.txt'
 CSV_FOLDER = None
+GAUSSIAN_BANDS = None
 R = None
 W = None
 S = None
-GAUSSIAN_BANDS = []
 
 # OS-relative slash for file system navigation
 SLASH = '\\' if ('Windows' in platform.system()) else '/'
@@ -51,7 +51,7 @@ def save_user_settings():
 def load_user_settings():
 	global CSV_FOLDER, R, W, S
 	
-	if(not os.path.exists(SAVE_DATA_FILE)):
+	if (not os.path.exists(SAVE_DATA_FILE)):
 		print('Error: could not find ' + SAVE_DATA_FILE)
 		quit()
 	
