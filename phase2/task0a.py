@@ -51,22 +51,14 @@ print('Please specify a desired shift length s:')
 util.S = int(input())
 print()
 
-util.save_user_settings()
-
-
-
 # Make sure the output directory exists
 if (not util.WRD_FOLDER in os.listdir(working_dir)):
 	os.mkdir(working_dir + util.SLASH + util.WRD_FOLDER)
 
-
-
 # Precompute the gaussian bands for later use
 mu = 0
 sigma = 0.25
-GAUSSIAN_BANDS = get_gaussian_bands(mu, sigma, util.R)
-
-
+util.GAUSSIAN_BANDS = get_gaussian_bands(mu, sigma, util.R)
 
 # Main loop
 print('Creating .wrd files...')
@@ -91,7 +83,7 @@ for f in data_files: # Iterate over data files
 			
 			data[sensor] = normalize(data[sensor]) #0a-1-a-ii-D
 			
-			data[sensor] = quantize(GAUSSIAN_BANDS, data[sensor]) #0a-1-a-ii-E
+			data[sensor] = quantize(util.GAUSSIAN_BANDS, data[sensor]) #0a-1-a-ii-E
 			
 			data[sensor] = get_windows(data[sensor], util.W, util.S) #0a-1-a-ii-F
 			
@@ -99,11 +91,12 @@ for f in data_files: # Iterate over data files
 				avgq = sum(h) / util.W # Average amplitude of quantized data
 				output_file.write(str(avgq) + ' ') #0a-1-a-ii-G
 				
-				winq = get_band_index(GAUSSIAN_BANDS, avgq) # Quantization of avgq
+				winq = get_band_index(util.GAUSSIAN_BANDS, avgq) # Quantization of avgq
 				winq = str(winq)
 				output_file.write(str(winq) + '\n') #0a-1-a-ii-H
 		output_file.write('\n')
 	output_file.close()
 print('Finished.')
 
+util.save_user_settings()
 
