@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 from typing import List
 import general_util as util
+import task0_util
 
 
 # Utils
@@ -64,17 +65,28 @@ def option5(gesture_file, vector_model):
 
 
 # Option 6 (Edit distance)
+"""
+Utilizes a symmetric cost function based on the midpoints of each band. 
+The cost of replacing is the distance from the midpoints from each band.
+"""
+#gives the midpoint of the gaussian band to which x belongs
+def get_band_midpoint(bands, x):
+	return (util.GAUSSIAN_BANDS[x]+util.GAUSSIAN_BANDS[x+1])/2.0
+
 def cost_insert(val):
-    return 1 #abs(val)
+    midpoint = get_band_midpoint(util.GAUSSIAN_BANDS, val)
+    return abs(midpoint)
 
 
 def cost_delete(val):
-    return 1 #abs(val)
-
+    midpoint = get_band_midpoint(util.GAUSSIAN_BANDS, val)
+    return abs(midpoint)
 
 # Cost of replacing val1 with val2
 def cost_replace(val1, val2):
-    return 1 #abs(val1 - val2)
+    midpoint1 = get_band_midpoint(util.GAUSSIAN_BANDS, val1)
+    midpoint2 = get_band_midpoint(util.GAUSSIAN_BANDS, val2)
+    return abs(midpoint1 - midpoint2)
 
 """
 Recursively determines the edit distance between two time series P and Q.
@@ -232,6 +244,9 @@ def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: 
 
 # Main
 if __name__ == '__main__':
+    # Load User Settings
+    util.load_user_settings()
+
     # Load arguments
     gesture_file = input('Gesture file (e.g. 1, 249, 559, etc.): ')
 
