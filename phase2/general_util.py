@@ -71,7 +71,7 @@ def load_user_settings():
 			elif (variable == 'S'):
 				S = int(value)
 			elif (variable == 'GAUSSIAN_BANDS'):
-				GAUSSIAN_BANDS = list(value)
+				GAUSSIAN_BANDS = eval(value)
 
 
 
