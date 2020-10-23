@@ -7,10 +7,10 @@ def get_average_amplitude(data):
 
 
 
-#interpretation: average of the square distance from the mean for a (file,component,sensor)
+#interpretation: square root of the average of the square distance from the mean for a (file,component,sensor)
 def get_standard_deviation(data):
 	mean = sum(data)/len(data)
-	return sum(map(lambda a : (a - mean)**2, data))/len(data)
+	return math.sqrt(sum(map(lambda a : (a - mean)**2, data))/len(data))
 
 
 
