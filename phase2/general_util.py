@@ -65,7 +65,6 @@ def load_user_settings():
 				CSV_FOLDER = value
 			elif (variable == 'R'):
 				R = int(value)
-				print('updated R to ' + str(R))
 			elif (variable == 'W'):
 				W = int(value)
 			elif (variable == 'S'):
