@@ -42,6 +42,7 @@ def serialize_top_k_matrix(top_k_matrix):
     working_dir = os.getcwd()
     vector_model =  "tf" if vector_model_input == "TF" else "tfidf"
     output_file = open(working_dir+util.SLASH+util.LATENT_SEMANTICS_FOLDER+util.SLASH + f"{vector_model}_{analysis_input}_{top_k_input}.txt",'w')
+    output_file2 = open(working_dir+util.SLASH+util.LATENT_SEMANTICS_FOLDER+util.SLASH + f"{vector_model}_{analysis_input}_{top_k_input}_unsorted.txt",'w')
 
     latent_semantic_index = 0
 
@@ -52,9 +53,12 @@ def serialize_top_k_matrix(top_k_matrix):
         for index in range(0, top_k_matrix.shape[1]):
             word_score_tuples.append((word_keys[index], latent_semantic[index]))
         
+        for word_score_pair in word_score_tuples:
+            output_file2.write(str((latent_semantic_index, word_score_pair)) + '\n')
+        
         # sort the list in descending order
         word_score_tuples.sort(key=lambda pair: pair[1], reverse=True)
-        #write to output_file, with key of the tuple being the index of the latent semantic
+        # write to output_file, with key of the tuple being the index of the top k latent component (e.g. 1 or 2)
         for word_score_pair in word_score_tuples:
             output_file.write(str((latent_semantic_index, word_score_pair)) + '\n')
         latent_semantic_index +=1
