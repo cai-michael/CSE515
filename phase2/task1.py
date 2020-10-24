@@ -35,8 +35,6 @@ if analysis_input not in ["PCA", "SVD", "NMF", "LDA"]:
 
 print('Specify the number of latent semantics to extract: (e.g 1)')
 top_k_input = int(input())
-print("top k inputs is")
-print(top_k_input)
 
 def serialize_top_k_matrix(top_k_matrix):
     working_dir = os.getcwd()
@@ -58,7 +56,7 @@ def serialize_top_k_matrix(top_k_matrix):
         
         # sort the list in descending order
         word_score_tuples.sort(key=lambda pair: pair[1], reverse=True)
-        # write to output_file, with key of the tuple being the index of the top k latent component (e.g. 1 or 2)
+        #write to output_file, with key of the tuple being the index of the top k latent component (e.g. 1 or 2)
         for word_score_pair in word_score_tuples:
             output_file.write(str((latent_semantic_index, word_score_pair)) + '\n')
         latent_semantic_index +=1
@@ -79,7 +77,9 @@ def get_top_k_latent_semantics(k, model, gesture_word_matrix):
 
     # take the top-k latent semantics
     top_k_matrix = model.components_
+
     return top_k_matrix
+
 
 gesture_word_matrix = []
 for id in list_gesture_ids():

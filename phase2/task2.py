@@ -42,8 +42,6 @@ def load_latent_component_feature_matrix(vector_model, top_k_number, analysis_ty
         component_feature_matrix.append(component_feature_vector)
     
     component_feature_matrix = np.array(component_feature_matrix)
-    print(component_feature_matrix)
-    print(component_feature_matrix.shape)
     return component_feature_matrix
 
 
@@ -61,7 +59,7 @@ def cosine_sim(a, b):
     cos_sim = dot(a, b)/(norm(a)*norm(b))
     return cos_sim
 
-def top_k_latent_semantic_sim(gesture_id1: str, gesture_id2: str, latent_component_vector) -> float:
+def top_k_latent_semantic_sim(gesture_id1: str, gesture_id2: str, vector_model, latent_component_vector) -> float:
     vector1 = np.array(load_vector(gesture_id1, vector_model))
     vector1 = vector1.dot(latent_component_vector.T)
     vector2 = np.array(load_vector(gesture_id2, vector_model))
@@ -84,40 +82,36 @@ def option1(gesture_id, vector_model):
 
 
 # Option 2 (PCA)
-def option2(gesture_id, vector_model):
-    top_k_input = int(input('How many top-k components did you specify?  (e.g. 1, 2, etc.): '))
+def option2(gesture_id, vector_model, top_k_input):
     gesture_ids = list_gesture_ids()
     latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "PCA")
-    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
     return similarities
 
 
 # Option 3 (SVD)
-def option3(gesture_id, vector_model):
-    top_k_input = int(input('How many top-k components did you specify?  (e.g. 1, 2, etc.): '))
+def option3(gesture_id, vector_model, top_k_input):
     gesture_ids = list_gesture_ids()
     latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "SVD")
-    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
     return similarities
 
 
 # Option 4 (NMF)
-def option4(gesture_id, vector_model):
-    top_k_input = int(input('How many top-k components did you specify?  (e.g. 1, 2, etc.): '))
+def option4(gesture_id, vector_model, top_k_input):
     gesture_ids = list_gesture_ids()
     latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "NMF")
-    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
     return similarities
 
 # Option 5 (LDA)
-def option5(gesture_id, vector_model):
-    top_k_input = int(input('How many top-k components did you specify?  (e.g. 1, 2, etc.): '))
+def option5(gesture_id, vector_model, top_k_input):
     gesture_ids = list_gesture_ids()
     latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "LDA")
-    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
     return similarities
 
@@ -209,7 +203,7 @@ def gesture_edit_distance(gesture1, gesture2):
     return total_distance
 
 
-def option6(gesture_file, vector_model):
+def option6(gesture_file, vector_model, top_k_input=None):
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
     for filename in filenames:
@@ -264,7 +258,7 @@ def gesture_dtw_distance(gesture1, gesture2):
     return sum(distances)
 
 
-def option7(gesture_file, vector_model):
+def option7(gesture_file, vector_model, top_k_input=None):
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
     for filename in filenames:
@@ -296,8 +290,10 @@ options = {
 def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: int):
     if option not in options:
         raise ValueError(f'Invalid option')
+    if option in [2,3,4,5]:
+        top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
     # TODO: we should return the top hit, from 0 to 10, not 1-11
-    return options[option][1](gesture_file, vector_model)[0:10]
+    return options[option][1](gesture_file, vector_model, top_k_input)[0:10]
 
 
 # Main
