@@ -37,7 +37,7 @@ if __name__ == '__main__':
     similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option, top_k_input)
 
     # Perform PCA
-    print("Found Gesture-Gesture Similarity Matrix Performing PCA")
+    print("Found Gesture-Gesture Similarity Matrix Performing NMF")
     model = decomposition.NMF(n_components=p, max_iter=10000)
     nmfDecomp = model.fit(similarityMatrix)
     
