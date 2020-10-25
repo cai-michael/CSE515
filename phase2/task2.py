@@ -3,14 +3,13 @@ from pathlib import Path
 from typing import List
 import general_util as util
 import task0_util
-
+import numpy as np
 
 # Utils
 def list_gesture_ids():
     filenames = util.get_files('./wrd_data', '.wrd')
     gesture_ids = [filename.split('.')[0] for filename in filenames]
     return gesture_ids
-
 
 def load_vector(gesture_id: str, vector_model: str) -> List[float]:
     if vector_model != 'TF' and vector_model != 'TF-IDF':
@@ -19,6 +18,29 @@ def load_vector(gesture_id: str, vector_model: str) -> List[float]:
     filepath = Path('./vector_data') / f'{model}_vectors_{gesture_id}.txt'
     vector = util.read_vector_txt_to_list(filepath)
     return vector
+
+def load_latent_component_feature_matrix(vector_model, top_k_number, analysis_type):
+    if vector_model != 'TF' and vector_model != 'TF-IDF':
+        raise ValueError('Invalid vector model')
+    model = 'tf' if vector_model == 'TF' else 'tfidf'
+    # example tf_PCA_3.txt, means get the PCA analysis for top 3 components on the gesture word TF matrix
+    filepath = Path('./latent_semantics_data') / f'{model}_{analysis_type}_{top_k_number}_unsorted.txt'
+    #geature = util.read_vector_txt_to_list(filepath)
+    lines = util.read_nonempty_lines(filepath)
+
+    
+    component_feature_matrix = []
+    for index in range(0, top_k_number):
+        component_feature_vector = []
+        for line in lines:
+            (latent_component_index, (word_key, score)) = eval(line)
+            if latent_component_index == index:
+                component_feature_vector.append(score)
+            
+        component_feature_matrix.append(component_feature_vector)
+    
+    component_feature_matrix = np.array(component_feature_matrix)
+    return component_feature_matrix
 
 
 # Option 1 (Dot product similarity)
@@ -29,7 +51,20 @@ def dot_product_sim(v1: List[float], v2: List[float]) -> float:
     dot_product = sum([c1 * c2 for c1, c2 in zip(v1, v2)])
     return dot_product
 
+def cosine_sim(a, b):
+    from numpy import dot
+    from numpy.linalg import norm
+    cos_sim = dot(a, b)/(norm(a)*norm(b))
+    return cos_sim
 
+def top_k_latent_semantic_sim(gesture_id1: str, gesture_id2: str, vector_model, latent_component_vector) -> float:
+    vector1 = np.array(load_vector(gesture_id1, vector_model))
+    vector1 = vector1.dot(latent_component_vector.T)
+    vector2 = np.array(load_vector(gesture_id2, vector_model))
+    vector2 = vector2.dot(latent_component_vector.T)
+    similarity = cosine_sim(vector1, vector2)
+    return similarity
+    
 def dot_product_gesture_sim(gesture_id1: str, gesture_id2: str, vector_model: str) -> float:
     vector1 = load_vector(gesture_id1, vector_model)
     vector2 = load_vector(gesture_id2, vector_model)
@@ -45,24 +80,38 @@ def option1(gesture_id, vector_model):
 
 
 # Option 2 (PCA)
-def option2(gesture_file, vector_model):
-    pass
+def option2(gesture_id, vector_model, top_k_input):
+    gesture_ids = list_gesture_ids()
+    latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "PCA")
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
+    return similarities
 
 
 # Option 3 (SVD)
-def option3(gesture_file, vector_model):
-    pass
+def option3(gesture_id, vector_model, top_k_input):
+    gesture_ids = list_gesture_ids()
+    latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "SVD")
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
+    return similarities
 
 
 # Option 4 (NMF)
-def option4(gesture_file, vector_model):
-    pass
-
+def option4(gesture_id, vector_model, top_k_input):
+    gesture_ids = list_gesture_ids()
+    latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "NMF")
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
+    return similarities
 
 # Option 5 (LDA)
-def option5(gesture_file, vector_model):
-    pass
-
+def option5(gesture_id, vector_model, top_k_input):
+    gesture_ids = list_gesture_ids()
+    latent_component_vector = load_latent_component_feature_matrix(vector_model, top_k_input, "LDA")
+    similarities = [(gesture_id2, top_k_latent_semantic_sim(gesture_id, gesture_id2, vector_model, latent_component_vector)) for gesture_id2 in gesture_ids]
+    similarities.sort(key=lambda pair: pair[1], reverse=True)
+    return similarities
 
 # Option 6 (Edit distance)
 """
@@ -151,8 +200,7 @@ def gesture_edit_distance(gesture1, gesture2):
     total_distance = sum(distances)
     return total_distance
 
-
-def option6(gesture_file, vector_model):
+def option6(gesture_file, vector_model, top_k_input=None):
     util.load_user_settings()
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
@@ -208,7 +256,7 @@ def gesture_dtw_distance(gesture1, gesture2):
     return sum(distances)
 
 
-def option7(gesture_file, vector_model):
+def option7(gesture_file, vector_model, top_k_input=None):
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
     for filename in filenames:
@@ -240,7 +288,9 @@ options = {
 def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: int):
     if option not in options:
         raise ValueError(f'Invalid option')
-    return options[option][1](gesture_file, vector_model)[1:11]
+    if option in [2,3,4,5]:
+        top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
+    return options[option][1](gesture_file, vector_model, top_k_input)[0:10]
 
 
 # Main
@@ -264,7 +314,7 @@ if __name__ == '__main__':
     vector_model = None
 
     if option < 6:
-        vector_model = input('Please select a vector model (TF/TF-IDF): ')
+        vector_model = input('Please select a vector model (TF/TF-IDF): ').upper()
         while vector_model not in { 'TF', 'TF-IDF' }:
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')
