@@ -200,8 +200,8 @@ def gesture_edit_distance(gesture1, gesture2):
     total_distance = sum(distances)
     return total_distance
 
-
 def option6(gesture_file, vector_model, top_k_input=None):
+    util.load_user_settings()
     filenames = util.get_files('./wrd_data', '.wrd')
     distances = []
     for filename in filenames:

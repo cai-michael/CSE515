@@ -1,10 +1,14 @@
 import task3_util as util
+import general_util as gen_util
 from task2 import options
 import numpy as np
 from sklearn import decomposition
 
 # Main
 if __name__ == '__main__':
+    # Load User Settings
+    gen_util.load_user_settings()
+
     # Load arguments
     p = int(input('How many principle components to return: '))
 
