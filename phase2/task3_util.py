@@ -1,3 +1,5 @@
+from multiprocessing import Pool
+import functools
 import numpy as np
 from task2 import *
 
@@ -7,6 +9,16 @@ def retrive_similarity_matrix_row(gesture_file: str, vector_model: str, option: 
         raise ValueError(f'Invalid option')
     return options[option][1](gesture_file, vector_model, top_k_input)
 
+def getSingleRow(gesture_id, vector_model, option, top_k_input):
+    # Refer to the global variable
+    # Find similarity based on the metric
+    similarities = retrive_similarity_matrix_row(gesture_id, vector_model, option, top_k_input)
+    # Sort by name
+    similarities.sort(key=lambda pair: int(pair[0]))
+    # Only get similarity scores to add to the matrix
+    modifiedSimilarities = [x[1] for x in similarities]
+    return modifiedSimilarities
+
 def createSimilarityMatrix(vector_model, option, top_k_input):
     # Create the similarity matrix
     print(f'Creating gesture-gesture similarity matrix based on {options[option][0]}...')
@@ -14,12 +26,14 @@ def createSimilarityMatrix(vector_model, option, top_k_input):
     filenames = [x.split('.')[0] for x in filenames]
     filenames.sort(key=lambda x: int(x))
     similarityMatrix = np.empty([len(filenames), len(filenames)])
-    for index, gesture_id in enumerate(filenames):
-        similarities = retrive_similarity_matrix_row(gesture_id, vector_model, option, top_k_input)
-        # Sort by name
-        similarities.sort(key=lambda pair: int(pair[0]))
-        modifiedSimilarities = [x[1] for x in similarities]
-        similarityMatrix[index] = modifiedSimilarities
+
+    # Multithread when finding each individual row of similarities
+    findSingleRow = functools.partial(getSingleRow, vector_model=vector_model, option=option, top_k_input=top_k_input)
+    with Pool() as p:
+        results = p.map(findSingleRow, filenames)
+    
+    for index, row in enumerate(results):
+        similarityMatrix[index] = row
     
     # Convert distances to similarity if they are distances
     if option >= 6:
