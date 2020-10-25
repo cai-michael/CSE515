@@ -72,7 +72,7 @@ def dot_product_gesture_sim(gesture_id1: str, gesture_id2: str, vector_model: st
     return similarity
 
 
-def option1(gesture_id, vector_model):
+def option1(gesture_id, vector_model, top_k_input=None):
     gesture_ids = list_gesture_ids()
     similarities = [(gesture_id2, dot_product_gesture_sim(gesture_id, gesture_id2, vector_model)) for gesture_id2 in gesture_ids]
     similarities.sort(key=lambda pair: pair[1], reverse=True)
@@ -288,6 +288,7 @@ options = {
 def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: int):
     if option not in options:
         raise ValueError(f'Invalid option')
+    top_k_input = None
     if option in [2,3,4,5]:
         top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
     return options[option][1](gesture_file, vector_model, top_k_input)[0:10]
