@@ -69,7 +69,7 @@ def get_top_k_latent_semantics(k, model, gesture_word_matrix):
     if model == "SVD":
         model = decomposition.TruncatedSVD(n_components=top_k_input)
     if model == "NMF":
-        model = decomposition.NMF(n_components=top_k_input)
+        model = decomposition.NMF(n_components=top_k_input, max_iter=10000)
     if model == "LDA":
         model = decomposition.LatentDirichletAllocation(n_components=top_k_input)
 
