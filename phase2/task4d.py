@@ -1,43 +1,7 @@
-import random
 import task3_util as util
 from task2 import options
+from task4_util import kmeans
 import numpy as np
-
-def kmeans(data, k):
-    threshold = .0001
-    max_iter = 200
-
-    # set k centroids
-    centroids = random.sample(list(data), k)
-
-    for iter in range(max_iter):
-        labels = []
-        points = {}
-
-        for i in range(len(data)):
-            dists = []
-            for j in range(len(centroids)):
-                dists.append(np.linalg.norm(data[i] - centroids[j]))
-            label = dists.index(min(dists))
-            labels.append(label)
-            if label not in points:
-                points[label] = []
-            points[label].append(data[i])
-
-        prev_centroids = np.array(centroids)
-
-        for i in range(len(points)):
-            centroids[i] = np.average(points[i], axis=0)
-
-        exit_loop = True
-        for i in range(k):
-            if np.sum((centroids[i] - prev_centroids[i]) / prev_centroids[i] * 100.0) > threshold:
-                exit_loop = False
-
-        if exit_loop:
-            break
-
-    return labels, points, centroids
 
 # Main
 if __name__ == '__main__':
@@ -62,7 +26,10 @@ if __name__ == '__main__':
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')
 
-    similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option)
+    if option in [2,3,4,5]:
+        top_k_input = int(input('How many top-k components did you specify during Task 1? (e.g. 1, 2, etc.): '))
+
+    similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option, top_k_input)
 
     # weighted similarity matrix
     for i in range(len(similarityMatrix)):
