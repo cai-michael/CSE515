@@ -24,7 +24,7 @@ if __name__ == '__main__':
     vector_model = None
 
     if option < 6:
-        vector_model = input('Please select a vector model (TF/TF-IDF): ')
+        vector_model = input('Please select a vector model (TF/TF-IDF): ').upper()
         while vector_model not in { 'TF', 'TF-IDF' }:
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')

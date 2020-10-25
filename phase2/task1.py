@@ -21,14 +21,14 @@ word_keys = list(dict_word_to_vector_value.keys())
 # Get user's preferences
 # Obtain the type of vector model
 print('Specify the type of vector model, TF or TF-IDF:')
-vector_model_input = input()
+vector_model_input = input().upper()
 if vector_model_input not in ["TF","TF-IDF"]:
     print("Invalid vector model")
     print("vector_model_input")
     exit()
 
-print('Specify the type of analysis, PCA SVD NMF or LDA:')
-analysis_input = input()
+print('Specify the type of analysis: PCA, SVD, NMF, or LDA:')
+analysis_input = input().upper()
 if analysis_input not in ["PCA", "SVD", "NMF", "LDA"]:
     print("Invalid analysis type")
     exit()
@@ -56,7 +56,7 @@ def serialize_top_k_matrix(top_k_matrix):
         
         # sort the list in descending order
         word_score_tuples.sort(key=lambda pair: pair[1], reverse=True)
-        #write to output_file, with key of the tuple being the index of the top k latent component (e.g. 1 or 2)
+        # write to output_file, with key of the tuple being the index of the top k latent component (e.g. 1 or 2)
         for word_score_pair in word_score_tuples:
             output_file.write(str((latent_semantic_index, word_score_pair)) + '\n')
         latent_semantic_index +=1

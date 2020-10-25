@@ -5,13 +5,11 @@ import general_util as util
 import task0_util
 import numpy as np
 
-
 # Utils
 def list_gesture_ids():
     filenames = util.get_files('./wrd_data', '.wrd')
     gesture_ids = [filename.split('.')[0] for filename in filenames]
     return gesture_ids
-
 
 def load_vector(gesture_id: str, vector_model: str) -> List[float]:
     if vector_model != 'TF' and vector_model != 'TF-IDF':
@@ -292,7 +290,6 @@ def find_10_most_similar_gestures(gesture_file: str, vector_model: str, option: 
         raise ValueError(f'Invalid option')
     if option in [2,3,4,5]:
         top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
-    # TODO: we should return the top hit, from 0 to 10, not 1-11
     return options[option][1](gesture_file, vector_model, top_k_input)[0:10]
 
 
@@ -317,7 +314,7 @@ if __name__ == '__main__':
     vector_model = None
 
     if option < 6:
-        vector_model = input('Please select a vector model (TF/TF-IDF): ')
+        vector_model = input('Please select a vector model (TF/TF-IDF): ').upper()
         while vector_model not in { 'TF', 'TF-IDF' }:
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')
