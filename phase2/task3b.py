@@ -23,11 +23,11 @@ if __name__ == '__main__':
         print('Invalid option. Please try again.')
         option = int(input('Please select an option: '))
 
+    top_k_input = None
     if option in [2,3,4,5]:
-        top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
+        top_k_input = int(input('How many top-k components did you specify during Task 1? (e.g. 1, 2, etc.): '))   
 
     vector_model = None
-
     if option < 6:
         vector_model = input('Please select a vector model (TF/TF-IDF): ')
         while vector_model not in { 'TF', 'TF-IDF' }:
