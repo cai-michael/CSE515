@@ -1,6 +1,7 @@
 import task3_util as util
 from task2 import options
 import numpy as np
+import os
 from sklearn import decomposition
 
 # Main
@@ -46,10 +47,20 @@ if __name__ == '__main__':
         rankedScoresForOneComponent.sort(key=lambda pair: pair[1], reverse=True)
         scores.append(rankedScoresForOneComponent)
     
-    # Print out results
-    for index, i in enumerate(scores):
-        print(f"Principal Component {index + 1} Similarity Scores:")
-        print("Gesture\t|\tScore")
-        for j in i:
-            print(f'{j[0]}\t|\t{j[1]}')
-        print("\n")
+    # Make sure the output directory exists
+    working_dir = os.getcwd()
+    folder_name = 'principal_components'
+    file_name = 'a_components'
+    if (not folder_name in os.listdir(working_dir)):
+	    os.mkdir(working_dir + '/' + folder_name)
+
+    # Print the results and write to output file
+    with open(f'{folder_name}/{file_name}', 'w') as f:
+        for index, i in enumerate(scores):
+            print(f"Principal Component {index + 1} Similarity Scores:")
+            print("Gesture\t|\tScore")
+            for j in i:
+                print(f'{j[0]}\t|\t{j[1]}')
+                f.write(f'{index}\t|\t{j[0]}\t|\t{j[1]}')
+                f.write("\n")
+            print("\n")
