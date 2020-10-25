@@ -17,16 +17,19 @@ if __name__ == '__main__':
     while option not in options:
         print('Invalid option. Please try again.')
         option = int(input('Please select an option: '))
+    
+    if option in [2,3,4,5]:
+        top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
 
     vector_model = None
 
     if option < 6:
-        vector_model = input('Please select a vector model (TF/TF-IDF): ')
+        vector_model = input('Please select a vector model (TF/TF-IDF): ').upper()
         while vector_model not in { 'TF', 'TF-IDF' }:
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')
     
-    similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option)
+    similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option, top_k_input)
 
     # Perform SVD
     print("Found Gesture-Gesture Similarity Matrix Performing SVD")
