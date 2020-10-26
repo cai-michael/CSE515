@@ -6,7 +6,7 @@ import numpy as np
 # Main
 if __name__ == '__main__':
     # Load arguments
-    p = int(input('How many principle components to return: '))
+    p = int(input('How many groups should the gestures be clustered into: '))
 
     # List options
     print('Options:')
