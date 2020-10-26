@@ -4,6 +4,7 @@ from task2 import options
 import numpy as np
 import os
 from sklearn import decomposition
+from sklearn.preprocessing import MinMaxScaler
 
 # Main
 if __name__ == '__main__':
@@ -37,7 +38,13 @@ if __name__ == '__main__':
     similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option, top_k_input)
 
     # The similarity matrix must be only positive numbers for NMF
-    similarityMatrix = (similarityMatrix - np.min(similarityMatrix)) / np.ptp(similarityMatrix)
+    if option == 5:
+        scaler = MinMaxScaler()
+        scaler.fit(similarityMatrix)
+        similarityMatrix = scaler.transform(similarityMatrix)
+    if option in [2, 3, 4]:
+        similarityMatrix = util.rescale(similarityMatrix)
+    
 
     # Perform PCA
     print("Found Gesture-Gesture Similarity Matrix Performing NMF")
