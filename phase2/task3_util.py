@@ -43,3 +43,6 @@ def createSimilarityMatrix(vector_model, option, top_k_input):
         similarityMatrix = conversion(similarityMatrix)
 
     return similarityMatrix, filenames
+
+def rescale(data, new_min=0, new_max=1):
+    return (data - data.min()) / (data.max() - data.min()) * (new_max - new_min) + new_min
