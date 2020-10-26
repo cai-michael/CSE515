@@ -42,11 +42,9 @@ if __name__ == '__main__':
         scaler = MinMaxScaler()
         scaler.fit(similarityMatrix)
         similarityMatrix = scaler.transform(similarityMatrix)
-    if option in [2, 3, 4]:
+    elif option in [1, 2, 3, 4]:
         similarityMatrix = util.rescale(similarityMatrix)
     
-
-
     # Perform PCA
     print("Found Gesture-Gesture Similarity Matrix Performing NMF")
     model = decomposition.NMF(n_components=p, max_iter=10000)
