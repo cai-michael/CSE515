@@ -46,6 +46,7 @@ if __name__ == '__main__':
         similarityMatrix = util.rescale(similarityMatrix)
     
 
+
     # Perform PCA
     print("Found Gesture-Gesture Similarity Matrix Performing NMF")
     model = decomposition.NMF(n_components=p, max_iter=10000)
@@ -53,6 +54,10 @@ if __name__ == '__main__':
     
     # Find top-p principle components
     basisVectors = nmfDecomp.components_
+
+    # Account for some rounding errors in sklearn's NMF library function
+    if basisVectors.max() > 1:
+        basisVectors /= basisVectors.max()
 
     # Find the contributions of each gesture to each basis vectors
     scores = []
