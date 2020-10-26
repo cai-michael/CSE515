@@ -5,7 +5,7 @@ from task4_util import kmeans
 # Main
 if __name__ == '__main__':
     # Load arguments
-    p = int(input('How many principle components to return: '))
+    p = int(input('How many groups should the gestures be clustered into: '))
 
     # List options
     print('Options:')
@@ -25,6 +25,7 @@ if __name__ == '__main__':
             print('Invalid vector model. Please try again.')
             vector_model = input('Please select a vector model (TF/TF-IDF): ')
     
+    top_k_input = None
     if option in [2,3,4,5]:
         top_k_input = int(input('How many top-k components did you specify during Task 1? (e.g. 1, 2, etc.): '))
 

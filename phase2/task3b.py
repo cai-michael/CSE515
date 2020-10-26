@@ -4,6 +4,7 @@ from task2 import options
 import numpy as np
 import os
 from sklearn import decomposition
+from sklearn.preprocessing import MinMaxScaler
 
 # Main
 if __name__ == '__main__':
@@ -23,11 +24,11 @@ if __name__ == '__main__':
         print('Invalid option. Please try again.')
         option = int(input('Please select an option: '))
 
+    top_k_input = None
     if option in [2,3,4,5]:
-        top_k_input = int(input('How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): '))
+        top_k_input = int(input('How many top-k components did you specify during Task 1? (e.g. 1, 2, etc.): '))   
 
     vector_model = None
-
     if option < 6:
         vector_model = input('Please select a vector model (TF/TF-IDF): ')
         while vector_model not in { 'TF', 'TF-IDF' }:
@@ -36,13 +37,25 @@ if __name__ == '__main__':
     
     similarityMatrix, gestureIndexes = util.createSimilarityMatrix(vector_model, option, top_k_input)
 
+    # The similarity matrix must be only positive numbers for NMF
+    if option == 5:
+        scaler = MinMaxScaler()
+        scaler.fit(similarityMatrix)
+        similarityMatrix = scaler.transform(similarityMatrix)
+    elif option in [1, 2, 3, 4]:
+        similarityMatrix = util.rescale(similarityMatrix)
+    
     # Perform PCA
-    print("Found Gesture-Gesture Similarity Matrix Performing PCA")
+    print("Found Gesture-Gesture Similarity Matrix Performing NMF")
     model = decomposition.NMF(n_components=p, max_iter=10000)
     nmfDecomp = model.fit(similarityMatrix)
     
     # Find top-p principle components
     basisVectors = nmfDecomp.components_
+
+    # Account for some rounding errors in sklearn's NMF library function
+    if basisVectors.max() > 1:
+        basisVectors /= basisVectors.max()
 
     # Find the contributions of each gesture to each basis vectors
     scores = []
