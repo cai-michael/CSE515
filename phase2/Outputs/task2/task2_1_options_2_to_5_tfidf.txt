@@ -1,0 +1,57 @@
+## gesture 1 top-10 results ##
+
+TF-IDF, PCA...
+How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): 4
+10 most similar gestures:
+1.      1       (similarity=0.9999999999999998)
+2.      11      (similarity=0.997821143914141)
+3.      559     (similarity=0.9871417046136511)
+4.      258     (similarity=0.98044990338199)
+5.      271     (similarity=0.9793842139736904)
+6.      266     (similarity=0.9690951061097891)
+7.      254     (similarity=0.9645936639764098)
+8.      253     (similarity=0.9629664738994237)
+9.      252     (similarity=0.9628166918945251)
+10.     256     (similarity=0.9605922454480068)
+
+TF-IDF, SVD...
+How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): 4
+10 most similar gestures:
+1.      1       (similarity=0.9999999999999998)
+2.      11      (similarity=0.9983278756205846)
+3.      261     (similarity=0.9965754703009807)
+4.      559     (similarity=0.9936175697468147)
+5.      251     (similarity=0.9929786315642273)
+6.      249     (similarity=0.9903787720491268)
+7.      255     (similarity=0.9885030687570231)
+8.      259     (similarity=0.9863835855955592)
+9.      265     (similarity=0.9821964670784514)
+10.     272     (similarity=0.9813485200638029)
+
+TF-IDF, NMF...
+How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): 4
+10 most similar gestures:
+1.      1       (similarity=1.0000000000000002)
+2.      261     (similarity=0.9991980218109296)
+3.      11      (similarity=0.9989471885386212)
+4.      259     (similarity=0.9984359165841965)
+5.      251     (similarity=0.9980670234626655)
+6.      273     (similarity=0.9970737678019784)
+7.      559     (similarity=0.9968332316802844)
+8.      586     (similarity=0.9959190636851459)
+9.      249     (similarity=0.9950992877182023)
+10.     265     (similarity=0.995038116450277)
+
+TF-IDF, LDA...
+How many top-k components did you specify during Task 1?  (e.g. 1, 2, etc.): 4
+10 most similar gestures:
+1.      1       (similarity=0.9999999999999998)
+2.      9       (similarity=0.9999999999917513)
+3.      10      (similarity=0.9999999999845426)
+4.      565     (similarity=0.9999999999814856)
+5.      589     (similarity=0.9999999999805491)
+6.      261     (similarity=0.9999999999798248)
+7.      6       (similarity=0.9999999999772636)
+8.      563     (similarity=0.9999999999635916)
+9.      267     (similarity=0.9999999999513242)
+10.     11      (similarity=0.9999999999506105)
