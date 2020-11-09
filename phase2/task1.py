@@ -14,8 +14,8 @@ if (not util.LATENT_SEMANTICS_FOLDER in os.listdir(working_dir)):
 	os.mkdir(working_dir+util.SLASH+util.LATENT_SEMANTICS_FOLDER)
 
 # Get the keys of all the words in our gesture-word dictionary
-filename = Path('./vector_data') / f"tf_vectors_1.txt"
-dict_word_to_vector_value = util.read_vector_txt(filename)
+filename = util.get_files('./vector_data', '.txt')[0]
+dict_word_to_vector_value = util.read_vector_txt('./vector_data/' + filename)
 word_keys = list(dict_word_to_vector_value.keys())
 
 # Get user's preferences
