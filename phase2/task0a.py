@@ -32,6 +32,8 @@ for c in util.COMPONENTS:
 data_files = set()
 for c in util.COMPONENTS:
 	data_files = data_files.union(set(util.get_files(gesture_dir + c, '.csv')))
+for c in util.COMPONENTS:
+	data_files = data_files.intersection(set(util.get_files(gesture_dir + c, '.csv')))
 data_files = list(data_files)
 data_files.sort()
 
