@@ -15,9 +15,10 @@ SLASH = '\\' if ('Windows' in platform.system()) else '/'
 
 # variables
 CSV_FOLDER = None
-R = None #resolution
-W = None #window size
-S = None #shift length
+R = None # resolution
+W = None # window size
+S = None # shift length
+DEGREE = None # similarity graph degree
 GAUSSIAN_BANDS = []
 
 
@@ -57,11 +58,12 @@ def save_user_settings():
 	file.write('W: '+ str(W) + '\n')
 	file.write('S: '+ str(S) + '\n')
 	file.write('GAUSSIAN_BANDS: ' + str(GAUSSIAN_BANDS) + '\n')
+	file.write('DEGREE: '+ str(DEGREE) + '\n')
 	file.close()
 
 # loads the data from SAVE_DATA_FILE
 def load_user_settings():
-	global CSV_FOLDER
+	global CSV_FOLDER, R, W, S, DEGREE
 	
 	if (not os.path.exists(SAVE_DATA_FILE)):
 		print('Error: could not find ' + SAVE_DATA_FILE)
@@ -73,16 +75,19 @@ def load_user_settings():
 			ind = line.index(': ')
 			variable = line[0:ind]
 			value = line[ind + 2:len(line)]
-			if (variable == 'CSV_FOLDER'):
-				CSV_FOLDER = value
-			elif (variable == 'R'):
-				R = int(value)
-			elif (variable == 'W'):
-				W = int(value)
-			elif (variable == 'S'):
-				S = int(value)
-			elif (variable == 'GAUSSIAN_BANDS'):
-				GAUSSIAN_BANDS = eval(value)
+			if(value != 'None'):
+				if (variable == 'CSV_FOLDER'):
+					CSV_FOLDER = value
+				elif (variable == 'R'):
+					R = int(value)
+				elif (variable == 'W'):
+					W = int(value)
+				elif (variable == 'S'):
+					S = int(value)
+				elif (variable == 'GAUSSIAN_BANDS'):
+					GAUSSIAN_BANDS = eval(value)
+				elif (variable == 'DEGREE'):
+					DEGREE = int(value)
 
 
 
@@ -126,5 +131,12 @@ def read_similarity_matrix(file_path):
 	matrix = [list(map(float, line.split(','))) for line in matrix]
 	matrix = np.matrix(matrix)
 	return (files, matrix)
+
+def read_similarity_graph(file_path):
+	graph = {}
+	for line in read_nonempty_lines(file_path):
+		line = line.split(': ')
+		graph[line[0]] = line[1].split(',')
+	return graph
 
 
