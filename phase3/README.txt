@@ -8,6 +8,7 @@ To execute a file, use the command:
 
 The programs were intended to be run using Python version 3.8.5 or higher.
 Required Libraries:
+	numpy
 	os
 	platform
 

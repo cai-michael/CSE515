@@ -65,5 +65,48 @@ def get_band_midpoint(x):
 def quantize(data):
 	return [get_band_midpoint(x) for x in data]
 
+# quantizes the values of data to the indices of the gaussian bands
+def symbolicize(data):
+	return [get_band_index(x) for x in data] 
+
+
+
+# returns a list of windows of length w separated by shift length s
+def get_windows(data, w, s):
+	result = []
+	t = 0
+	while(t+w <= len(data)):
+		result.append(data[t:t+w])
+		t += s
+	return result
+
+
+
+# converts wrd data into an integral vector of counts for each (component, sensor, band) tuple
+def wrd_to_count_vector(wrd_data):
+	result = {}
+	for c in wrd_data:
+		for sensor_id in range(len(wrd_data[c])):
+			band_counts = [0 for band in range(2*util.R)]
+			for x in wrd_data[c][sensor_id]:
+				band_counts[x] += 1
+			for ind in range(len(band_counts)):
+				label = c + ';' + str(sensor_id) + ';' + str(ind)
+				result[label] = band_counts[ind]
+	return result
+
+#creates a list of every possible word (every possible dimension in a gesture vector)
+def get_possible_words():
+	result = []
+	for c in util.COMPONENTS:
+		for s in range(util.SENSOR_COUNT):
+			for i in range(2*util.R):
+				result.append(c+';'+str(s)+';'+str(i))
+	return result
+
+
+
+def dot_product_similarity(gvec1, gvec2):
+	return sum([gvec1[word] * gvec2[word] for word in gvec1])
 
 

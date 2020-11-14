@@ -1,10 +1,13 @@
 import os
 import platform
+import numpy as np
 
 COMPONENTS = ['X','Y','Z','W']
+SENSOR_COUNT = 20
 
 SAVE_DATA_FILE = 'user_settings.txt'
 WRD_FOLDER = 'wrd_data'
+VECTOR_FOLDER = 'vector_data'
 GRAPH_FOLDER = 'graph_data'
 
 # OS-relative slash for file system navigation
@@ -13,6 +16,8 @@ SLASH = '\\' if ('Windows' in platform.system()) else '/'
 # variables
 CSV_FOLDER = None
 R = None #resolution
+W = None #window size
+S = None #shift length
 GAUSSIAN_BANDS = []
 
 
@@ -49,6 +54,8 @@ def save_user_settings():
 	file = open(SAVE_DATA_FILE, 'w')
 	file.write('CSV_FOLDER: ' + CSV_FOLDER + '\n')
 	file.write('R: '+ str(R) + '\n')
+	file.write('W: '+ str(W) + '\n')
+	file.write('S: '+ str(S) + '\n')
 	file.write('GAUSSIAN_BANDS: ' + str(GAUSSIAN_BANDS) + '\n')
 	file.close()
 
@@ -70,6 +77,10 @@ def load_user_settings():
 				CSV_FOLDER = value
 			elif (variable == 'R'):
 				R = int(value)
+			elif (variable == 'W'):
+				W = int(value)
+			elif (variable == 'S'):
+				S = int(value)
 			elif (variable == 'GAUSSIAN_BANDS'):
 				GAUSSIAN_BANDS = eval(value)
 
@@ -80,5 +91,40 @@ def read_csv(file_path):
 	result = read_nonempty_lines(file_path)
 	result = [[float(val) for val in line.split(',')] for line in result] # split on commas and convert to floats
 	return result
+
+# reads a wrd file and returns a dictionary {component: [sensor1 = [1, 3, 0, 1...], sensor2 = [...]...]}
+def read_wrd_quantized(file_path):
+	result = {}
+	component = None
+	for line in read_nonempty_lines(file_path):
+		if(line[0] == '#'):
+			line = line[1:len(line)].split(' ')
+			if(line[0] == 'component'):
+				component = line[-1]
+				result[component] = []
+		else:
+			line = line.split(',')
+			line = [int(x) for x in line]
+			result[component].append(line)
+	return result
+
+# same as read_wrd_quantized, but gives the band midpoints instead
+def read_wrd(file_path):
+	result = read_wrd_quantized(file_path)
+	for c in result:
+		for sensor_id in range(len(result[c])):
+			result[c][sensor_id] = [(GAUSSIAN_BANDS[x] + GAUSSIAN_BANDS[x+1])/2.0 for x in result[c][sensor_id]]
+	return result
+
+
+
+# returns (file_names, similarity_matrix)
+def read_similarity_matrix(file_path):
+	matrix = read_nonempty_lines(file_path)
+	files = matrix[0].split(',')
+	matrix = matrix[1:len(matrix)]
+	matrix = [list(map(float, line.split(','))) for line in matrix]
+	matrix = np.matrix(matrix)
+	return (files, matrix)
 
 

@@ -1,4 +1,5 @@
 import os
+import copy
 import general_util as util
 from task0_util import *
 
@@ -40,16 +41,19 @@ for f in data_files:
 	print(f)
 print()
 
-
-
-# Make sure the output directory exists
-util.check_folder(working_dir, util.WRD_FOLDER)
+# Strip '.txt' from file names
+data_files = [f[0:-4] for f in data_files]
 
 
 
 # Obtain RESOLUTION
 print('Please specify a desired resolution r:')
 util.R = int(input())
+print('Please specify a desired window length w:')
+util.W = int(input())
+print('Please specify a desired shift length s:')
+util.S = int(input())
+print()
 
 
 
@@ -58,27 +62,99 @@ mu = 0
 sigma = 0.25
 util.GAUSSIAN_BANDS = get_gaussian_bands(mu, sigma, util.R)
 
+util.save_user_settings()
+
 
 
 # Preprocess the data (quantize, normalize)
-print('Processing the .csv files')
+print('Converting the data to .wrd')
+util.check_folder(working_dir, util.WRD_FOLDER) # make sure the output directory exists
+
 for f in data_files: # Iterate over data files
-	file_name = f[0:-4]
-	#output_file = open(working_dir + util.SLASH + util.WRD_FOLDER + util.SLASH + file_name+'.wrd','w')
-	
+	output_file = open(working_dir + util.SLASH + util.WRD_FOLDER + util.SLASH + f +'.wrd','w')
 	for c in util.COMPONENTS: # Iterate over components
-		data = util.read_csv(gesture_dir + c + util.SLASH + f)
-		
+		data = util.read_csv(gesture_dir + c + util.SLASH + f + '.csv')
+		output_file.write('#component '+c+'\n')
 		for sensor in range(len(data)): # Iterate over sensors
-			data[sensor] = normalize(data[sensor])
+			data[sensor] = get_windows(data[sensor], util.W, util.S) #split into windows
+			data[sensor] = [sum(a)/len(a) for a in data[sensor]] #convert each window to its average
+			data[sensor] = normalize(data[sensor]) #normalize after splitting to get those sweet, sweet extreme values
+			data[sensor] = symbolicize(data[sensor]) #quantize to band indices
 			
-			data[sensor] = quantize(data[sensor])
-			
-			data[sensor] = list(map(get_band_index, data[sensor]))
-			
-			print(str(data[sensor]).replace(' ',''))
-	#output_file.close()
+			out = str(data[sensor])
+			out = out.replace(' ','')[1:-1]
+			#print(out)
+			output_file.write(out+'\n')
+	output_file.close()
+print('Finished.\n')
 
 
 
-util.save_user_settings()
+print('Converting the data to gesture vectors...\n')
+util.check_folder(working_dir, util.VECTOR_FOLDER)
+
+data = {}
+for f in data_files:
+	data[f] = util.read_wrd_quantized(working_dir + util.SLASH + util.WRD_FOLDER + util.SLASH + f + '.wrd')
+	data[f] = wrd_to_count_vector(data[f])
+
+WORD_LIST = get_possible_words()
+
+print('Computing TF vectors...')
+tf = {}
+for f in data:
+	tf[f] = {}
+	total = float(sum([data[f][word] for word in data[f]]))
+	for word in data[f]:
+		tf[f][word] = data[f][word]/total
+	
+	output_file = open(working_dir + util.SLASH + util.VECTOR_FOLDER + util.SLASH + 'tf_vector_' + f + '.txt','w')
+	for word in tf[f]:
+		output_file.write(word+' '+str(tf[f][word])+'\n')
+	output_file.close()
+print('Finished.\n')
+
+print('Computing IDF values...')
+idf = {}
+for word in WORD_LIST:
+	idf[word] = 0
+	for f in data:
+		idf[word] += 1 if (data[f][word] > 0) else 0 # Count files that contain the word -> m
+	if(idf[word] == 0):
+		idf[word] = None
+	else:
+		idf[word] = math.log(len(data) / idf[word]) # log(N/m)
+print('Finished.\n')
+
+print('Computing TF-IDF vectors...')
+tfidf = {}
+for f in data:
+	tfidf[f] = {}
+	for word in WORD_LIST:
+		if (idf[word] == None):
+			tfidf[f][word] = 0.0
+		else:
+			tfidf[f][word] = tf[f][word] * idf[word]
+	
+	output_file = open(working_dir + util.SLASH + util.VECTOR_FOLDER + util.SLASH + 'tfidf_vector_' + f + '.txt','w')
+	for word in tfidf[f]:
+		output_file.write(word+' '+str(tfidf[f][word])+'\n')
+	output_file.close()
+print('Finished.\n')
+
+
+
+print('Computing gesture-gesture similarity matrix...')
+util.check_folder(working_dir, util.GRAPH_FOLDER)
+
+similarity_matrix = [[dot_product_similarity(tf[f1], tf[f2]) for f2 in data] for f1 in data]
+
+output_file = open(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt','w')
+output_file.write(str(list(data.keys())).replace(' ','').replace("'",'')[1:-1]+'\n')
+for row in similarity_matrix:
+	output_file.write(str(row).replace(' ','')[1:-1]+'\n')
+output_file.close()
+
+print('Finished.')
+
+
