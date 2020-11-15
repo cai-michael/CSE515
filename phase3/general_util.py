@@ -138,5 +138,3 @@ def read_similarity_graph(file_path):
 		line = line.split(': ')
 		graph[line[0]] = line[1].split(',')
 	return graph
-
-
