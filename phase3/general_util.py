@@ -9,6 +9,7 @@ SAVE_DATA_FILE = 'user_settings.txt'
 WRD_FOLDER = 'wrd_data'
 VECTOR_FOLDER = 'vector_data'
 GRAPH_FOLDER = 'graph_data'
+PLOT_FOLDER = 'gesture_plots'
 
 # OS-relative slash for file system navigation
 SLASH = '\\' if ('Windows' in platform.system()) else '/'

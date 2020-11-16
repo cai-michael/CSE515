@@ -72,9 +72,12 @@ for g in dominant_gestures:
 		rawData = util.read_csv(gesture_dir + c + util.SLASH + g + '.csv')
 		norm_dom_gest[g][c] = rawData
 
+# Make sure the output directory exists
+util.check_folder(working_dir, util.PLOT_FOLDER)
+plotFolder = working_dir + util.SLASH + util.PLOT_FOLDER + util.SLASH
+
 # Plot the dominant gestures
-for gesture in norm_dom_gest:
-	plt.clf()
+for pltnum, gesture in enumerate(norm_dom_gest, 1):
 	fig, axs = plt.subplots(2, 2)
 	for index, c in enumerate(util.COMPONENTS):
 		createPlot(norm_dom_gest[gesture][c], axs[index // 2, index % 2])
@@ -82,16 +85,14 @@ for gesture in norm_dom_gest:
 
 	for ax in axs.flat:
 		ax.set(xlabel='Timestamp', ylabel='Sensor Value')
+		ax.grid(axis='y')
 
-	fig.tight_layout(pad=0.1) # Add Padding
-	fig.suptitle(f'Gesture {gesture}', fontsize=12)
-
-	# Hide x labels and tick labels for top plots and y ticks for right plots.
-	#for ax in axs.flat:
-	#	ax.label_outer()
 	
-	#mng = plt.get_current_fig_manager()
-	#mng.frame.Maximize(True)
+	fig.suptitle(f'Gesture {gesture}', fontsize=20)
 
-	plt.show()
-	print('something')
+	handles, labels = ax.get_legend_handles_labels()
+	fig.legend(handles, labels, loc='center')
+
+	fig.tight_layout(pad=0.1, w_pad=4) # Add Padding
+	fig.set_size_inches(16, 9)
+	plt.savefig(f'{plotFolder}{gesture}.png', bbox_inches='tight')
