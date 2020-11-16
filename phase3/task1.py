@@ -73,7 +73,7 @@ for g in dominant_gestures:
 		norm_dom_gest[g][c] = rawData
 
 # Make sure the output directory exists
-util.check_folder(working_dir, util.PLOT_FOLDER)
+util.check_folder(working_dir, util.PLOT_FOLDER, deleteFirst=True)
 plotFolder = working_dir + util.SLASH + util.PLOT_FOLDER + util.SLASH
 
 # Plot the dominant gestures
