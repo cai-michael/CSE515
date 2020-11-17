@@ -1,7 +1,11 @@
-import general_util as util
 import os
+import copy
 import numpy as np
+import general_util as util
+import matplotlib.pyplot as plt
+from collections import defaultdict
 from graph_util import *
+from task1_util import *
 
 working_dir = os.getcwd()
 util.load_user_settings()
@@ -10,8 +14,6 @@ util.load_user_settings()
 util.check_folder(working_dir, util.GRAPH_FOLDER)
 
 data_files, similarity_matrix = util.read_similarity_matrix(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt')
-
-
 
 # Create similarity graph
 print('Please specify a desired degree k for the similarity graph:')
@@ -61,8 +63,36 @@ print('\nFound the following dominant gestures:')
 for g in dominant_gestures:
 	print(g)
 
+gesture_dir = util.CSV_FOLDER + util.SLASH
 
+# Pull Normalized Values for Dominant Gestures
+norm_dom_gest = defaultdict(dict)
+for g in dominant_gestures:
+	for c in util.COMPONENTS: # Iterate over components
+		rawData = util.read_csv(gesture_dir + c + util.SLASH + g + '.csv')
+		norm_dom_gest[g][c] = rawData
 
-# Visualize dominant gestures
+# Make sure the output directory exists
+util.check_folder(working_dir, util.PLOT_FOLDER, deleteFirst=True)
+plotFolder = working_dir + util.SLASH + util.PLOT_FOLDER + util.SLASH
 
+# Plot the dominant gestures
+for pltnum, gesture in enumerate(norm_dom_gest, 1):
+	fig, axs = plt.subplots(2, 2)
+	for index, c in enumerate(util.COMPONENTS):
+		createPlot(norm_dom_gest[gesture][c], axs[index // 2, index % 2])
+		axs[index // 2, index % 2].set_title(c)
 
+	for ax in axs.flat:
+		ax.set(xlabel='Timestamp', ylabel='Sensor Value')
+		ax.grid(axis='y')
+
+	
+	fig.suptitle(f'Gesture {gesture}', fontsize=20)
+
+	handles, labels = ax.get_legend_handles_labels()
+	fig.legend(handles, labels, loc='center')
+
+	fig.tight_layout(pad=0.1, w_pad=4) # Add Padding
+	fig.set_size_inches(16, 9)
+	plt.savefig(f'{plotFolder}{gesture}.png', bbox_inches='tight')

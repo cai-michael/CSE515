@@ -1,8 +1,6 @@
 import math
 import general_util as util
 
-
-
 #normalizes data into the -1.0 to 1.0 range
 #converts all to 0.0 if data is all the same
 def normalize(data):
@@ -11,8 +9,6 @@ def normalize(data):
 	if(maxval == minval):
 		return [0.0 for x in data]
 	return [2.0*(x - minval)/(maxval - minval)-1.0 for x in data]
-
-
 
 # integral of normal distribution from a to b
 def definite_gauss_integral(mu, sigma, a, b):
@@ -104,9 +100,5 @@ def get_possible_words():
 				result.append(c+';'+str(s)+';'+str(i))
 	return result
 
-
-
 def dot_product_similarity(gvec1, gvec2):
 	return sum([gvec1[word] * gvec2[word] for word in gvec1])
-
-

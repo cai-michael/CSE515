@@ -1,5 +1,6 @@
 import os
 import platform
+import shutil
 import numpy as np
 
 COMPONENTS = ['X','Y','Z','W']
@@ -9,6 +10,7 @@ SAVE_DATA_FILE = 'user_settings.txt'
 WRD_FOLDER = 'wrd_data'
 VECTOR_FOLDER = 'vector_data'
 GRAPH_FOLDER = 'graph_data'
+PLOT_FOLDER = 'gesture_plots'
 
 # OS-relative slash for file system navigation
 SLASH = '\\' if ('Windows' in platform.system()) else '/'
@@ -30,12 +32,20 @@ def get_files(directory, extension):
 		os.listdir(directory)))
 
 # check if a folder exists; if not, create it
-def check_folder(directory, folder_name):
+def check_folder(directory, folder_name, deleteFirst=False):
 	if(folder_name in os.listdir(directory)):
+		if deleteFirst:
+			shutil.rmtree(directory + SLASH + folder_name)
+			os.mkdir(directory + SLASH + folder_name)
 		return True
 	else:
 		os.mkdir(directory + SLASH + folder_name)
 		return False
+
+def remove_files_in_folder(directory, fileNames):
+	for f in fileNames:
+		os.remove(directory + f)
+	return
 
 # extracts the nonempty lines from a file, formats them as a list
 def read_nonempty_lines(file_path):
@@ -138,5 +148,3 @@ def read_similarity_graph(file_path):
 		line = line.split(': ')
 		graph[line[0]] = line[1].split(',')
 	return graph
-
-
