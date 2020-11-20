@@ -25,23 +25,34 @@ vector_data = {f : util.read_vector(util.VECTOR_FOLDER+util.SLASH+'tfidf_vector_
 
 
 
-# TO DO: populate this from user input somehow
+print('\nPlease specify the number of distinct labels for classification:')
 labeled_gestures = {} # dict of form {gesture name : label}
-labeled_gestures['1'] = 0
-labeled_gestures['3'] = 0
-labeled_gestures['21'] = 0
-labeled_gestures['260'] = 1
-labeled_gestures['267'] = 1
-labeled_gestures['273'] = 1
-labeled_gestures['577'] = 2
-labeled_gestures['587'] = 2
-labeled_gestures['589'] = 2
+classes = {label : [] for label in range(int(input()))} # dict of form {label : [gesture names]}
+print('\nTo specify the gestures in a label, use a comma-separated list. (e.g. "1, 3, 8")')
+print('You can also specify ranges using a colon. (e.g. "5:9")')
+print('Select files from: '+data_files_to_pretty_string(data_files)+'\n')
 
-classes = {} # dict of form {label : [gesture names]}
-for g in labeled_gestures:
-	if(not labeled_gestures[g] in classes):
-		classes[labeled_gestures[g]] = []
-	classes[labeled_gestures[g]].append(g)
+for label in classes:
+	print('Please specify just the gestures for label '+str(label)+'.')
+	command = input().replace(' ','').split(',')
+	for word in command:
+		if(':' in word): # specify a range
+			word = word.split(':')
+			if(word[0].isnumeric() and word[1].isnumeric()):
+				word[0] = int(word[0])
+				word[1] = int(word[1])
+				word[0], word[1] = min(word[0], word[1]), max(word[0], word[1])
+				word = set([str(a) for a in range(word[0], word[1]+1)])
+				word = list(word.intersection(set(data_files)))
+				for w in word:
+					labeled_gestures[w] = label
+					classes[label].append(w)
+		elif(word in data_files):
+			labeled_gestures[word] = label
+			classes[label].append(word)
+#print(labeled_gestures)
+#print(classes)
+print()
 
 
 
