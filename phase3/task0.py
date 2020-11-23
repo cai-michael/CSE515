@@ -1,5 +1,6 @@
 import os
 import copy
+import numpy as np
 import general_util as util
 from task0_util import *
 
@@ -147,7 +148,11 @@ print('Finished.\n')
 print('Computing gesture-gesture similarity matrix...')
 util.check_folder(working_dir, util.GRAPH_FOLDER)
 
-similarity_matrix = [[dot_product_similarity(tf[f1], tf[f2]) for f2 in data] for f1 in data]
+# computes the similarity matrix using dot product
+similarity_matrix = [list(tfidf[f].values()) for f in data]
+similarity_matrix = np.matrix(similarity_matrix)
+similarity_matrix = np.matmul(similarity_matrix, similarity_matrix.transpose())
+similarity_matrix = similarity_matrix.tolist()
 
 output_file = open(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt','w')
 output_file.write(str(list(data.keys())).replace(' ','').replace("'",'')[1:-1]+'\n')

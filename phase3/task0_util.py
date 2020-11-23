@@ -101,9 +101,3 @@ def get_possible_words():
 	return result
 
 
-
-def dot_product_similarity(gvec1, gvec2):
-	return sum([gvec1[word] * gvec2[word] for word in gvec1])
-
-def euclidean_distance(gvec1, gvec2):
-	return math.sqrt(sum([(gvec1[word]-gvec2[word])**2 for word in gvec1]))
