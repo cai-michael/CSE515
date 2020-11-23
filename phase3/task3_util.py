@@ -27,7 +27,7 @@ def load_vectors(vector_model: str):
     model = 'tf' if vector_model == 'TF' else 'tfidf'
     filenames = util.get_files(util.VECTOR_FOLDER, '.txt')
     for filename in filenames:
-        prefix, _, gesture_id = filename.split('.')[0].split('_')
+        prefix, _, gesture_id = filename.split('.')[0].split('_', maxsplit=2)
         if prefix == model:
             vector = load_vector(vector_model, gesture_id)
             vectors.append(vector)
@@ -44,8 +44,9 @@ class LSH:
         k: int,
         vectors: List[float],
         vector_ids: List[Any]=None,
-        w=100,
-        s=2
+        w=3,        # Number of windows
+        s=2,        # s-norm distance
+        scale=1000  # Factor by which to scale projection vector
     ):
         print('Initializing LSH index structure...')
         self.L = L
@@ -54,6 +55,7 @@ class LSH:
         self.vector_ids = vector_ids or vectors
         self.w = w
         self.s = s
+        self.scale = scale
 
         self._init_layers()
         self._init_buckets()
@@ -74,10 +76,10 @@ class LSH:
 
     # Sample hash function from Ls family
     def _generate_hash_function(self):
-        dim = len(self.vectors[0])        # dimension of each vector
-        w = self.w                        # window length
-        p = np.random.normal(0, 1, dim)   # projection vector
-        b = w * random.random()           # [0, w)
+        dim = len(self.vectors[0])                    # dimension of vector space
+        w = self.w                                    # no. of windows
+        p = self.scale * np.random.normal(0, 1, dim)  # scaled projection vector
+        b = w * random.random()                       # [0, w)
         h = lambda x: math.floor((p.dot(x) + b) / w)
         return h
 
@@ -90,7 +92,7 @@ class LSH:
     # Init buckets and add vectors to buckets
     def _init_buckets(self):
         print('Initializing buckets...')
-        # Create L hash tables, one for each bucket
+        # Create L hash tables, one for each layer
         self.tables = [{} for _ in self.g]
         for i, vector in enumerate(self.vectors):
             for j, table in enumerate(self.tables):
