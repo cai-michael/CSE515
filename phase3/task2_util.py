@@ -3,10 +3,10 @@ def majority_vote(votes):
 	counts = {}
 	for k in votes:
 		if(not k in counts):
-			counts[k] = 0
-		counts[k] += 1
+			counts[k] = votes.count(k)
 	cvalues = list(counts.values())
 	return list(counts.keys())[cvalues.index(max(cvalues))]
+
 
 
 # expresses the data_files as a compact string, abbreviating consecutive entries
