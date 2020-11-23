@@ -9,7 +9,6 @@ def majority_vote(votes):
 	return list(counts.keys())[cvalues.index(max(cvalues))]
 
 
-
 # expresses the data_files as a compact string, abbreviating consecutive entries
 def data_files_to_pretty_string(data_files):
 	numeric = []
@@ -41,6 +40,24 @@ def data_files_to_pretty_string(data_files):
 	if(len(result) > 0) and (result[-1] == ','):
 		result = result[0:-1]
 	return result.replace(',',', ')
+
+
+import pandas as pd
+import general_util as util
+import os
+
+# A helper function to read the sample_training_labels excel file.
+# Returns a mapping for a gesture to its label
+def get_gesture_label_mapping(filename='sample_training_labels.xlsx'):
+    dict_mapping = {}
+    working_dir = os.getcwd()
+    mapping_file = working_dir + util.SLASH + filename
+    df = pd.read_excel(mapping_file, header=None)
+    for idx, row in df.iterrows():
+        # set key as gestureId and value as the label
+        dict_mapping[row.iloc[0]] = row.iloc[1]
+    
+    return dict_mapping
 
 """Implementation of the CART algorithm to train decision tree classifiers."""
 import numpy as np
