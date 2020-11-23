@@ -13,37 +13,49 @@ def majority_vote(votes):
 
 
 
-# expresses the data_files as a compact string, abbreviating consecutive entries
-def data_files_to_pretty_string(data_files):
-	numeric = []
-	nonnumeric = []
-	
-	for f in data_files:
-		if(f.isnumeric()):
-			numeric.append(int(f))
-		else:
-			nonnumeric.append(f)
-	numeric.sort()
+# expresses numeric data_files as a compact string
+def numeric_data_files_to_pretty_string(data_files):
+	numeric = filter(lambda a : a.isnumeric(), data_files)
+	numeric = list(map(int, numeric))
 	
 	# horrible list comprehension (but effective)
-	numeric = [str(numeric[ind]) if (ind == 0) or (ind == len(numeric)-1) # preserve endpoints
-		else (':' if (numeric[ind] == numeric[ind-1]+1) and (numeric[ind] == numeric[ind+1]-1)
-			else str(numeric[ind]))
+	numeric = [':' if (ind > 0) and (ind < len(numeric)-1) and
+			(numeric[ind] == numeric[ind-1]+1) and (numeric[ind] == numeric[ind+1]-1)
+		else str(numeric[ind])
 		for ind in range(len(numeric))]
-
+	
 	numeric = str(numeric)[1:-1].replace("'",'').replace(' ','')
 	numeric = numeric.replace(':,',':').replace(',:',':')
 	while('::' in numeric):
 		numeric = numeric.replace('::',':')
+	return numeric
+
+# expresses the data_files compactly using ranges
+def data_files_to_pretty_string(data_files, give_overview=True):
+	families = {}
+	for f in data_files:
+		prefix = f.split('_')[0]
+		if(not prefix in families):
+			families[prefix] = []
+		families[prefix].append(f)
 	
-	nonnumeric = str(nonnumeric)[1:-1].replace("'",'').replace(' ','')
+	for k in families:
+		families[k] = util.sortFileNames(families[k])
 	
-	result = numeric+','+nonnumeric
-	if(len(result) > 0) and (result[0] == ','):
-		result = result[1:len(result)]
-	if(len(result) > 0) and (result[-1] == ','):
-		result = result[0:-1]
+	keylist = util.sortFileNames(list(families.keys()))
 	
+	result = []
+	if(give_overview):
+		result.append(numeric_data_files_to_pretty_string(keylist))
+	
+	for k in keylist:
+		if(len(families[k]) > 1):
+			result.append(families[k][0] + ':' + families[k][-1])
+		else:
+			result.append(families[k][0])
+	
+	result = str(result)[1:-1].replace("'",'').replace(' ','')
+	result = result.replace(':,',':').replace(',:',':')
 	return result.replace(',',', ')
 
 

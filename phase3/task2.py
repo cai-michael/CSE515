@@ -34,7 +34,8 @@ classes = {label : [] for label in range(int(input()))} # dict of form {label : 
 print('\nTo specify the gestures in a label, use a comma-separated list. (e.g. "1, 3, 8")')
 print('You can also specify ranges using a colon. (e.g. "5:9")')
 sortedDataFiles = util.sortFileNames(data_files)
-print('Select files from: 1:31_9, 249:279_9, 559:589_9, ' + ', '.join(sortedDataFiles) + '\n')
+#print('Select files from: 1:31_9, 249:279_9, 559:589_9, ' + ', '.join(sortedDataFiles) + '\n')
+print('Select files from: ' + data_files_to_pretty_string(sortedDataFiles) + '\n')
 
 for label in classes:
 	print('Please specify just the gestures for label '+str(label)+'.')
@@ -144,8 +145,7 @@ else:
 print('\nObtained the following classification:')
 for k in classes:
 	print('\nClass '+str(k))
-	classes[k].sort(key=lambda a: int(a)) # WARNING: will break for non-numeric gesture names
-	# need to convert result to SET to avoid duplicated labels inside a class
-	# also will resort the set, just in case
-	for g in sorted(set(classes[k]), key=int):
+	classes[k] = list(set(classes[k]))
+	classes[k] = util.sortFileNames(classes[k])
+	for g in classes[k]:
 		print(g)
