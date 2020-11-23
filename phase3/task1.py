@@ -65,6 +65,7 @@ for g in dominant_gestures:
 
 gesture_dir = util.CSV_FOLDER + util.SLASH
 
+print('\nVisualizing Dominant Gestures...')
 # Pull Normalized Values for Dominant Gestures
 norm_dom_gest = defaultdict(dict)
 for g in dominant_gestures:
@@ -96,3 +97,5 @@ for pltnum, gesture in enumerate(norm_dom_gest, 1):
 	fig.tight_layout(pad=0.1, w_pad=4) # Add Padding
 	fig.set_size_inches(16, 9)
 	plt.savefig(f'{plotFolder}{gesture}.png', bbox_inches='tight')
+
+print('\nDone')
