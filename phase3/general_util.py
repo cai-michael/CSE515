@@ -159,3 +159,35 @@ def read_similarity_graph(file_path):
 		line = line.split(': ')
 		graph[line[0]] = line[1].split(',')
 	return graph
+
+
+def tuplifyNames(names):
+	# Find the name with the most underscores
+	tupleLength = 1
+	for name in names:
+		newLength = name.count('_') + 1
+		if tupleLength < newLength:
+			tupleLength = newLength
+
+	# Create tuples based on the names
+	tuples = []
+	for name in names:
+		words = name.split('_')
+		tupleToAppend = [-1] * tupleLength
+		for idx, value in enumerate(words):
+			tupleToAppend[idx] = int(value)
+		tuples.append(tuple(tupleToAppend))
+	tuples.sort()
+	return tuples
+
+def removeAllOccurrences(listToCheck, value):
+	while value in listToCheck:
+		listToCheck.remove(value)
+	return listToCheck
+
+def sortFileNames(names):
+	tuplifiedNames = tuplifyNames(names)
+	stringifiedNames = [list(str(x) for x in tup) for tup in tuplifiedNames]
+	adjustedNames = [removeAllOccurrences(tup, '-1') for tup in stringifiedNames]
+	sortedNames = ['_'.join(tups) for tups in adjustedNames] 
+	return sortedNames
