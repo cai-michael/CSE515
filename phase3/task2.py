@@ -65,8 +65,8 @@ unclassified_gestures = list(unclassified_gestures)
 # Each classification method should add unclassified_gestures to the lists in the 'classes' dictionary
 if(classifier == 1):
     distance_metric = lambda a, b : task0.euclidean_distance(vector_data[a], vector_data[b])
-    hit = 0;
-    total = 0;
+    hit = 0
+    total = 0
     print('Please select the degree k for nearest neighbors:')
     k = int(input())
 
