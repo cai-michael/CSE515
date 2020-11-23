@@ -34,21 +34,19 @@ print('\nTo specify the gestures in a label, use a comma-separated list. (e.g. "
 print('You can also specify ranges using a colon. (e.g. "5:9")')
 print('Select files from: '+data_files_to_pretty_string(data_files)+'\n')
 
+sortedDataFiles = util.sortFileNames(data_files)
 for label in classes:
     print('Please specify just the gestures for label '+str(label)+'.')
     command = input().replace(' ','').split(',')
     for word in command:
         if(':' in word): # specify a range
             word = word.split(':')
-            if(word[0].isnumeric() and word[1].isnumeric()):
-                word[0] = int(word[0])
-                word[1] = int(word[1])
-                word[0], word[1] = min(word[0], word[1]), max(word[0], word[1])
-                word = set([str(a) for a in range(word[0], word[1]+1)])
-                word = list(word.intersection(set(data_files)))
-                for w in word:
-                    labeled_gestures[w] = label
-                    classes[label].append(w)
+            firstWordIndex = sortedDataFiles.index(word[0])
+            secondWordIndex = sortedDataFiles.index(word[1])
+            rangeOfFiles = sortedDataFiles[firstWordIndex:secondWordIndex + 1]
+            for w in rangeOfFiles:
+                labeled_gestures[w] = label
+                classes[label].append(w)
         elif(word in data_files):
             labeled_gestures[word] = label
             classes[label].append(word)
