@@ -133,6 +133,17 @@ def read_wrd(file_path):
 
 
 
+# returns {'component;sensor;word' : float}
+def read_vector(file_path):
+	result = {}
+	for line in read_nonempty_lines(file_path):
+		line = line.split(' ')
+		line[1] = float(line[1])
+		result[line[0]] = line[1]
+	return result
+
+
+
 # returns (file_names, similarity_matrix)
 def read_similarity_matrix(file_path):
 	matrix = read_nonempty_lines(file_path)
