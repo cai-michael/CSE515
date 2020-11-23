@@ -1,3 +1,7 @@
+import pandas as pd
+import general_util as util
+import os
+
 # return the option that occurs most, or the earlier one if there's a tie
 def majority_vote(votes):
 	counts = {}
@@ -39,12 +43,10 @@ def data_files_to_pretty_string(data_files):
 		result = result[1:len(result)]
 	if(len(result) > 0) and (result[-1] == ','):
 		result = result[0:-1]
+	
 	return result.replace(',',', ')
 
 
-import pandas as pd
-import general_util as util
-import os
 
 # A helper function to read the sample_training_labels excel file.
 # Returns a mapping for a gesture to its label
