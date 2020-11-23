@@ -71,26 +71,13 @@ if(classifier == 1):
     k = int(input())
 
     print('Classifying gestures using '+str(k)+' nearest neighbors...')
-    for g in labeled_gestures: # unclassified_gestures:
+    for g in all_gestures:
         distances = {f : distance_metric(g, f) for f in labeled_gestures} # compute dict of distances
         ranking = sorted(distances.keys(), key=lambda f : distances[f])
         ranking = ranking[0:k]
         ranking = [labeled_gestures[f] for f in ranking] # get labels
         final_vote = majority_vote(ranking)
-        int_gesture = int(g)
-        actual_label = None
-        if int_gesture <= 31:
-            actual_label = 0
-        elif int_gesture < 559:
-            actual_label = 1
-        else:
-            actual_label = 2
-        if actual_label == final_vote:
-            hit +=1
-        total += 1
         classes[majority_vote(ranking)].append(g)
-    print("final score")
-    print(hit/total)
 
 elif(classifier == 2):
     print('Classifying gestures using personalized page rank...')
@@ -102,7 +89,6 @@ elif(classifier == 2):
     gesture_index_in_graph = list(similarity_graph.keys())
     for label in classes:
         labeled_gestures_in_class = classes[label]
-        print(labeled_gestures_in_class)
 
         # Init seed gestures as the labeled gestures
         init_vector = np.zeros((len(data_files), 1))
@@ -119,8 +105,7 @@ elif(classifier == 2):
                     gesture_score_dict[gesture_name] = (score, label)
             else:
                 gesture_score_dict[gesture_name] = (score, label)
-
-    print(gesture_score_dict)
+    # print(gesture_score_dict) prints the breakdown of scores for a given gesture using PPR
     for gesture in gesture_score_dict:
         label = gesture_score_dict[gesture][1]
         classes[label].append(gesture)
@@ -131,37 +116,21 @@ else:
     for gesture in labeled_gestures:
         training_data.append(list(vector_data[gesture].values()))
     X = np.array(training_data)
-    print(X.shape)
-    y = np.array(list(labeled_gestures.values()))  # pylint: disable=no-member
-    print(y)
+    y = np.array(list(labeled_gestures.values()))
     clf = DecisionTreeClassifier(max_depth=1000)
     clf.fit(X, y)
 
-    clf_dict = {}
-    hit = 0
-    total = 0
     for gesture in all_gestures:
-        int_gesture = int(gesture)
-        actual_label = None
-        if int_gesture <= 31:
-            actual_label = 0
-        elif int_gesture < 559:
-            actual_label = 1
-        else:
-            actual_label = 2
         input_arr = list(vector_data[gesture].values())
-        value = clf.predict([input_arr])
-        clf_dict[gesture] = value[0]
-        if actual_label == value[0]:
-            hit += 1
-        total += 1
-    print(clf_dict)
-    print(hit/total)
-
-#print(labeled_gestures)
+        value = clf.predict([input_arr]) # clf.predict returns a list, pick first element
+        class_label = value[0]
+        classes[class_label].append(gesture)
+    
 print('\nObtained the following classification:')
 for k in classes:
 	print('\nClass '+str(k))
-	sorted_classes = set(classes[k].sort(key=lambda a: int(a))) # WARNING: will break for non-numeric gesture names
-	for g in sorted_classes[k]:
+	classes[k].sort(key=lambda a: int(a)) # WARNING: will break for non-numeric gesture names
+    # need to convert result to SET to avoid duplicated labels inside a class
+    # also will resort the set, just in case
+	for g in sorted(set(classes[k]), key=int):
 		print(g)
