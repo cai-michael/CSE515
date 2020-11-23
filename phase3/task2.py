@@ -34,7 +34,6 @@ classes = {label : [] for label in range(int(input()))} # dict of form {label : 
 print('\nTo specify the gestures in a label, use a comma-separated list. (e.g. "1, 3, 8")')
 print('You can also specify ranges using a colon. (e.g. "5:9")')
 sortedDataFiles = util.sortFileNames(data_files)
-#print('Select files from: 1:31_9, 249:279_9, 559:589_9, ' + ', '.join(sortedDataFiles) + '\n')
 print('Select files from: ' + data_files_to_pretty_string(sortedDataFiles) + '\n')
 
 for label in classes:

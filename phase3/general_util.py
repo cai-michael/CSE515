@@ -181,11 +181,13 @@ def tuplifyNames(names):
 	return tuples
 
 def removeAllOccurrences(listToCheck, value):
+	# Removes all occurrances of a value in a list
 	while value in listToCheck:
 		listToCheck.remove(value)
 	return listToCheck
 
 def sortFileNames(names):
+	# Sorts the file names when there are underscores in them
 	tuplifiedNames = tuplifyNames(names)
 	stringifiedNames = [list(str(x) for x in tup) for tup in tuplifiedNames]
 	adjustedNames = [removeAllOccurrences(tup, '-1') for tup in stringifiedNames]
