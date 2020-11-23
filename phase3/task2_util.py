@@ -13,7 +13,8 @@ def majority_vote(votes):
 
 
 
-# expresses numeric data_files as a compact string
+# expresses numeric data_files as a list of strings; hard to explain
+# don't call this function unless you're in the know!
 def numeric_data_files_to_pretty_string(data_files):
 	numeric = filter(lambda a : a.isnumeric(), data_files)
 	numeric = list(map(int, numeric))
@@ -28,6 +29,7 @@ def numeric_data_files_to_pretty_string(data_files):
 	numeric = numeric.replace(':,',':').replace(',:',':')
 	while('::' in numeric):
 		numeric = numeric.replace('::',':')
+	numeric = numeric.split(',')
 	return numeric
 
 # expresses the data_files compactly using ranges
@@ -46,7 +48,13 @@ def data_files_to_pretty_string(data_files, give_overview=True):
 	
 	result = []
 	if(give_overview):
-		result.append(numeric_data_files_to_pretty_string(keylist))
+		overview = numeric_data_files_to_pretty_string(keylist)
+		for s in overview:
+			if(':' in s):
+				s = s.split(':')
+				result.append(families[s[0]][0] + ':' + families[s[1]][-1])
+			else:
+				result.append(s)
 	
 	for k in keylist:
 		if(len(families[k]) > 1):
