@@ -160,6 +160,12 @@ def read_similarity_graph(file_path):
 		graph[line[0]] = line[1].split(',')
 	return graph
 
+# Read vector txt as a list containing TF/TF-IDF values,
+# in the order stored in the file
+def read_vector_txt_to_list(file_path):
+	lines = read_nonempty_lines(file_path)
+	vector = [float(line.split(' ')[1]) for line in lines]
+	return vector
 
 def tuplifyNames(names):
 	# Find the name with the most underscores
