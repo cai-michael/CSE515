@@ -20,6 +20,7 @@ def load_vector(vector_model: str, gesture_id: str):
 # Load vectors of the specified vector model
 # and the gesture ids associated with each vector
 def load_vectors(vector_model: str):
+    print('Loading gesture vectors...')
     vectors = []
     gesture_ids = []
     if vector_model not in {'TF', 'TF-IDF'}:
