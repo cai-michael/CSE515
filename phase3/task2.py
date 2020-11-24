@@ -132,12 +132,11 @@ else:
 		training_data.append(list(vector_data[gesture].values()))
 	X = np.array(training_data)
 	y = np.array(list(labeled_gestures.values()))
-	clf = DecisionTreeClassifier(max_depth=1000)
-	clf.fit(X, y)
+	tree = fit_decision_tree(X, y)
 
 	for gesture in all_gestures:
 		input_arr = list(vector_data[gesture].values())
-		value = clf.predict([input_arr]) # clf.predict returns a list, pick first element
+		value = predict(tree, [input_arr]) # clf.predict returns a list, pick first element
 		class_label = value[0]
 		classes[class_label].append(gesture)
 	
