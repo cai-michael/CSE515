@@ -100,5 +100,4 @@ def get_possible_words():
 				result.append(c+';'+str(s)+';'+str(i))
 	return result
 
-def dot_product_similarity(gvec1, gvec2):
-	return sum([gvec1[word] * gvec2[word] for word in gvec1])
+

@@ -133,6 +133,17 @@ def read_wrd(file_path):
 
 
 
+# returns {'component;sensor;word' : float}
+def read_vector(file_path):
+	result = {}
+	for line in read_nonempty_lines(file_path):
+		line = line.split(' ')
+		line[1] = float(line[1])
+		result[line[0]] = line[1]
+	return result
+
+
+
 # returns (file_names, similarity_matrix)
 def read_similarity_matrix(file_path):
 	matrix = read_nonempty_lines(file_path)
@@ -155,3 +166,36 @@ def read_vector_txt_to_list(file_path):
 	lines = read_nonempty_lines(file_path)
 	vector = [float(line.split(' ')[1]) for line in lines]
 	return vector
+
+def tuplifyNames(names):
+	# Find the name with the most underscores
+	tupleLength = 1
+	for name in names:
+		newLength = name.count('_') + 1
+		if tupleLength < newLength:
+			tupleLength = newLength
+
+	# Create tuples based on the names
+	tuples = []
+	for name in names:
+		words = name.split('_')
+		tupleToAppend = [-1] * tupleLength
+		for idx, value in enumerate(words):
+			tupleToAppend[idx] = int(value)
+		tuples.append(tuple(tupleToAppend))
+	tuples.sort()
+	return tuples
+
+def removeAllOccurrences(listToCheck, value):
+	# Removes all occurrances of a value in a list
+	while value in listToCheck:
+		listToCheck.remove(value)
+	return listToCheck
+
+def sortFileNames(names):
+	# Sorts the file names when there are underscores in them
+	tuplifiedNames = tuplifyNames(names)
+	stringifiedNames = [list(str(x) for x in tup) for tup in tuplifiedNames]
+	adjustedNames = [removeAllOccurrences(tup, '-1') for tup in stringifiedNames]
+	sortedNames = ['_'.join(tups) for tups in adjustedNames] 
+	return sortedNames
