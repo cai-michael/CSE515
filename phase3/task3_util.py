@@ -45,9 +45,8 @@ class LSH:
         k: int,
         vectors: List[float],
         vector_ids: List[Any]=None,
-        w=3,        # Number of windows
-        s=2,        # s-norm distance
-        scale=1000  # Factor by which to scale projection vector
+        w=0.01,   # Length of window
+        s=2       # s-norm distance
     ):
         print('Initializing LSH index structure...')
         self.L = L
@@ -56,7 +55,6 @@ class LSH:
         self.vector_ids = vector_ids or vectors
         self.w = w
         self.s = s
-        self.scale = scale
 
         self._init_layers()
         self._init_buckets()
@@ -78,8 +76,8 @@ class LSH:
     # Sample hash function from Ls family
     def _generate_hash_function(self):
         dim = len(self.vectors[0])                    # dimension of vector space
-        w = self.w                                    # no. of windows
-        p = self.scale * np.random.normal(0, 1, dim)  # scaled projection vector
+        w = self.w                                    # length of window
+        p = np.random.normal(0, 1, dim)               # scaled projection vector
         b = w * random.random()                       # [0, w)
         h = lambda x: math.floor((p.dot(x) + b) / w)
         return h
