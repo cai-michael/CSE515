@@ -11,7 +11,7 @@ def probabilistic_relev(lsh, vector_model, query, relevant, nonrelevant, initial
     print(nonrelevant)
 
     vectors, gesture_ids = load_vectors(vector_model)
-    threshold = .001  # minimum term frequency for a term to be counted as part of the document
+    threshold = .0001  # minimum term frequency for a term to be counted as part of the document
 
     T = len(vectors[0])  # number of terms
     N = len(vectors)  # number of documents
