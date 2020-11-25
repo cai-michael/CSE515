@@ -28,11 +28,11 @@ vectors, vector_ids = load_vectors(vector_model)
 # Initialize LSH index structure
 lsh = LSH(L, k, vectors, vector_ids)
 
-gesture_id = input('Please enter a gesture id (e.g. 1, 249, 559, etc.): ')
+query_gesture = input('Please enter a gesture id (e.g. 1, 249, 559, etc.): ')
 
 t = int(input('Please enter t: '))
 
-query = load_vector(vector_model, gesture_id)
+query = load_vector(vector_model, query_gesture)
 
 # Find t most similar gestures
 top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
@@ -85,11 +85,14 @@ while user_choice != 3:
         # The user picked the classifier based relevance feedback system
         else:
             print("Re-Running the Query with Classifier-Based Relevance Feedback")
+            if query_gesture not in relevant_gestures:
+                relevant_gestures.append(query_gesture) 
             sorted_gesture_scores = classifier_relev(data_files, similarity_graph, top_t, relevant_gestures, irrelevant_gestures)
             order = 0
             print(f'Classifier-based relevance feedback:')
+            originalResults = [i[0] for i in top_t]
             for gesture_id, score in sorted_gesture_scores.items():
-                if gesture_id in top_t:
+                if gesture_id in originalResults:
                     print(f'{order + 1}.\t{gesture_id}\t(score={score})')
                     order += 1
 

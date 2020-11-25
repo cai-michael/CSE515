@@ -38,6 +38,11 @@ def get_sorted_gesture_scores(similarity_graph, transition_matrix, init_vector):
 # this is the one that should be used in task6
 # will permanently alter similarity_graph
 def classifier_relev(data_files, similarity_graph, top_t_gestures, relevant, irrelevant):
+	print('Relevant: ')
+	print(relevant)
+	print('Nonrelevant: ')
+	print(irrelevant)
+
 	update_similarity_graph(similarity_graph, irrelevant)
 	
 	# Build transition matrix
