@@ -13,8 +13,13 @@ working_dir = os.getcwd()
 # Obtain querying inputs
 L = int(input('Please enter the number of layers L: '))
 k = int(input('Please enter the number of hashes per layer k: '))
-vector_model = input('Please enter a vector model (TF/TF-IDF): ')
+vector_model = input('Please enter a vector model (TF/TF-IDF): ').upper()
 feedback_model = int(input("Please pick which feedback model you would like to use\n1. Probabilistic Relevance Feedback\n2. Classifier-based Relevance Feedback\n"))
+
+if feedback_model == 2:
+    print('\nLoading Similarity Matrix and Graph...\n')
+    data_files, similarity_matrix = util.read_similarity_matrix(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt')
+    similarity_graph = util.read_similarity_graph(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_graph.txt')
 
 # Load vectors from vector_data folder
 vectors, vector_ids = load_vectors(vector_model)

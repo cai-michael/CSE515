@@ -1,12 +1,10 @@
 from task3_util import load_vector, load_vectors, LSH
 from pprint import pprint
-from task4 import probabilistic_relev
-
 
 if __name__ == '__main__':
     L = int(input('Please enter the number of layers L: '))
     k = int(input('Please enter the number of hashes per layer k: '))
-    vector_model = input('Please enter a vector model (TF/TF-IDF): ')
+    vector_model = input('Please enter a vector model (TF/TF-IDF): ').upper()
 
     # Load vectors from vector_data folder
     vectors, vector_ids = load_vectors(vector_model)
