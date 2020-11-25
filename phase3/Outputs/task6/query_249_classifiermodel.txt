@@ -1,0 +1,134 @@
+PS C:\Users\caimi\Desktop\CSE515\phase3> python .\task6.py
+Please enter the number of layers L: 4
+Please enter the number of hashes per layer k: 4
+Please enter a vector model (TF/TF-IDF): TF-IDF
+Please pick which feedback model you would like to use
+1. Probabilistic Relevance Feedback
+2. Classifier-based Relevance Feedback
+2
+
+Loading Similarity Matrix and Graph...
+
+Loading gesture vectors...
+Initializing LSH index structure...
+Initializing 4 layers...
+Initializing buckets...
+Initialized LSH index structure.
+Please enter a gesture id (e.g. 1, 249, 559, etc.): 249
+Please enter t: 30
+Searching for candidates...
+Computing distances...
+No. of buckets searched:  4
+No. of unique gestures considered:  977
+Overall no. of gestures considered:  2128
+Top 30 most similar gestures:
+1.      249     (distance=0.0)
+2.      249_2   (distance=0.0019286016536428816)
+3.      249_3   (distance=0.0019411744101687988)
+4.      249_7   (distance=0.0020008150739264027)
+5.      249_6   (distance=0.002032673288272781)
+6.      249_9   (distance=0.002033590869953776)
+7.      249_5   (distance=0.0020513098458332323)
+8.      249_4   (distance=0.002074897001587192)
+9.      249_8   (distance=0.0020832584190194157)
+10.     249_1   (distance=0.0021134828358495236)
+11.     249_0   (distance=0.0021313222488229104)
+12.     257     (distance=0.0021517224639557827)
+13.     11      (distance=0.0022035951123466585)
+14.     11_8    (distance=0.0022044199203447756)
+15.     11_0    (distance=0.0022270084580618982)
+16.     560     (distance=0.002259032471999494)
+17.     11_3    (distance=0.0022664133464215287)
+18.     22_1    (distance=0.0022725675224862904)
+19.     261     (distance=0.0022729264174696775)
+20.     22_2    (distance=0.0022809478791072147)
+21.     22_0    (distance=0.002290699290662757)
+22.     11_1    (distance=0.002291597773182586)
+23.     11_5    (distance=0.0022941678555941473)
+24.     22_6    (distance=0.002295505727553067)
+25.     11_9    (distance=0.002296057191715434)
+26.     22_4    (distance=0.002305276880273458)
+27.     252     (distance=0.0023080299860411616)
+28.     22_5    (distance=0.002311721827313278)
+29.     22_7    (distance=0.0023141749280714045)
+30.     11_4    (distance=0.0023144294463352316)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+1         
+
+Which gestures do you want to specify as relevant?
+257, 261, 249_0
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+2
+
+Which gestures do you want to specify as irrelevant?
+11, 22_2
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+2
+Re-Running the Query with Classifier-Based Relevance Feedback
+Relevant:
+['249_0', '261', '257', '249']
+Nonrelevant:
+['22_2', '11']
+Classifier-based relevance feedback:
+1.      249_0   (score=0.0867796610169492)
+2.      249_1   (score=0.069406779661017)
+3.      249_6   (score=0.06559322033898311)
+4.      249_4   (score=0.054961911594245384)
+5.      249_3   (score=0.04817431031142368)
+6.      249_2   (score=0.04638027187173235)
+7.      249_5   (score=0.03268402041268152)
+8.      257     (score=0.029500000000000002)
+9.      249     (score=0.025)
+10.     261     (score=0.025)
+11.     249_7   (score=0.012848448936911824)
+12.     249_9   (score=0.008671375856056264)
+13.     249_8   (score=0.004500000000000001)
+14.     11      (score=0.0)
+15.     11_0    (score=0.0)
+16.     11_1    (score=0.0)
+17.     11_3    (score=0.0)
+18.     11_4    (score=0.0)
+19.     11_5    (score=0.0)
+20.     11_8    (score=0.0)
+21.     11_9    (score=0.0)
+22.     22_0    (score=0.0)
+23.     22_1    (score=0.0)
+24.     22_2    (score=0.0)
+25.     22_4    (score=0.0)
+26.     22_5    (score=0.0)
+27.     22_6    (score=0.0)
+28.     22_7    (score=0.0)
+29.     252     (score=0.0)
+30.     560     (score=0.0)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit

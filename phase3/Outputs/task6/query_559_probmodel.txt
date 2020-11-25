@@ -1,0 +1,137 @@
+PS C:\Users\caimi\Desktop\CSE515\phase3> python .\task6.py
+Please enter the number of layers L: 4
+Please enter the number of hashes per layer k: 4
+Please enter a vector model (TF/TF-IDF): TF-IDF
+Please pick which feedback model you would like to use
+1. Probabilistic Relevance Feedback
+2. Classifier-based Relevance Feedback
+1
+Loading gesture vectors...
+Initializing LSH index structure...
+Initializing 4 layers...
+Initializing buckets...
+Initialized LSH index structure.
+Please enter a gesture id (e.g. 1, 249, 559, etc.): 559
+Please enter t: 30
+Searching for candidates...
+Computing distances...
+No. of buckets searched:  4
+No. of unique gestures considered:  868
+Overall no. of gestures considered:  1645
+Top 30 most similar gestures:
+1.      559     (distance=0.0)
+2.      559_2   (distance=0.0016253520278362967)
+3.      559_9   (distance=0.001629954311702865)
+4.      559_8   (distance=0.001698627939497234)
+5.      559_5   (distance=0.001706631502966617)
+6.      559_0   (distance=0.0017259419119498066)
+7.      559_7   (distance=0.0017336947107796474)
+8.      559_6   (distance=0.0017394944055503668)
+9.      559_1   (distance=0.0017788931662510205)
+10.     559_3   (distance=0.0017874813486857888)
+11.     559_4   (distance=0.001829463163449093)
+12.     250     (distance=0.002154142198448631)
+13.     11_0    (distance=0.002154749777659485)
+14.     1_1     (distance=0.002195067115934932)
+15.     1_0     (distance=0.0022021928771572405)
+16.     1_7     (distance=0.0022176926332915362)
+17.     1_9     (distance=0.00222480780323021)
+18.     1_6     (distance=0.0022296708819652647)
+19.     11_3    (distance=0.002230064255234292)
+20.     1_5     (distance=0.0022378225355313246)
+21.     11_6    (distance=0.00223785811377189)
+22.     11      (distance=0.002239270808441286)
+23.     11_8    (distance=0.0022425987044890137)
+24.     252_3   (distance=0.002245293163314815)
+25.     11_4    (distance=0.002246609361209578)
+26.     1_3     (distance=0.002254236112890724)
+27.     1_2     (distance=0.002267919804982943)
+28.     11_9    (distance=0.0022713214274358894)
+29.     11_2    (distance=0.0022722788709351152)
+30.     252_4   (distance=0.0022786467391479404)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+1
+
+Which gestures do you want to specify as relevant?
+559_0
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+2
+
+Which gestures do you want to specify as irrelevant?
+250, 252_3, 252_4
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+2
+Re-Running the Query with Probabilistic Relevance Feedback
+Relevant:
+['559_0']
+Nonrelevant:
+['252_3', '250', '252_4']
+Loading gesture vectors...
+Probabilistic Relevance Feedback:
+1.      559     (distance=0.0)  (weighted_distance=0.0)
+2.      559_8   (distance=0.001698627939497234) (weighted_distance=0.0025426532963877526)
+3.      559_1   (distance=0.0017788931662510205)        (weighted_distance=0.0025538400871908742)
+4.      559_7   (distance=0.0017336947107796474)        (weighted_distance=0.0025873580738343697)
+5.      559_9   (distance=0.001629954311702865) (weighted_distance=0.0026141700533484705)
+6.      559_2   (distance=0.0016253520278362967)        (weighted_distance=0.0026608404160928527)
+7.      559_5   (distance=0.001706631502966617) (weighted_distance=0.00266235856297062)
+8.      559_6   (distance=0.0017394944055503668)        (weighted_distance=0.0027329000019185408)
+9.      559_3   (distance=0.0017874813486857888)        (weighted_distance=0.002767618693955644)
+10.     559_4   (distance=0.001829463163449093) (weighted_distance=0.002852258210270861)
+11.     559_0   (distance=0.0017259419119498066)        (weighted_distance=0.0029520790404470765)
+12.     11_0    (distance=0.002154749777659485) (weighted_distance=0.0029870000074770486)
+13.     11_8    (distance=0.0022425987044890137)        (weighted_distance=0.003027567322772602)
+14.     1_5     (distance=0.0022378225355313246)        (weighted_distance=0.00309161073821112)
+15.     11_3    (distance=0.002230064255234292) (weighted_distance=0.0030928965719969237)
+16.     1_9     (distance=0.00222480780323021)  (weighted_distance=0.0031226476673944003)
+17.     11_4    (distance=0.002246609361209578) (weighted_distance=0.0031408510156989474)
+18.     11_2    (distance=0.0022722788709351152)        (weighted_distance=0.0031521655360526382)
+19.     1_7     (distance=0.0022176926332915362)        (weighted_distance=0.0031874719514385064)
+20.     1_1     (distance=0.002195067115934932) (weighted_distance=0.0031900666693072243)
+21.     1_3     (distance=0.002254236112890724) (weighted_distance=0.0032085237884793487)
+22.     11_9    (distance=0.0022713214274358894)        (weighted_distance=0.0032107641753717346)
+23.     1_6     (distance=0.0022296708819652647)        (weighted_distance=0.0032535451900804185)
+24.     11_6    (distance=0.00223785811377189)  (weighted_distance=0.003263391868128367)
+25.     1_2     (distance=0.002267919804982943) (weighted_distance=0.0032806774912552705)
+26.     1_0     (distance=0.0022021928771572405)        (weighted_distance=0.0032913095361639133)
+27.     11      (distance=0.002239270808441286) (weighted_distance=0.0034302422734742936)
+28.     252_4   (distance=0.0022786467391479404)        (weighted_distance=0.0035113152315609767)
+29.     252_3   (distance=0.002245293163314815) (weighted_distance=0.00352189407540145)
+30.     250     (distance=0.002154142198448631) (weighted_distance=0.0038090441231206184)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+3
+Quit Chosen
+
+Exiting.
