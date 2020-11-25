@@ -9,8 +9,10 @@ if __name__ == '__main__':
     # Load vectors from vector_data folder
     vectors, vector_ids = load_vectors(vector_model)
 
+    w = 0.01 if vector_model == 'TF-IDF' else 0.1
+
     # Initialize LSH index structure
-    lsh = LSH(L, k, vectors, vector_ids)
+    lsh = LSH(L, k, vectors, vector_ids, w=w)
 
     #pprint(lsh.tables)
 
