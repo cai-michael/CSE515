@@ -1,0 +1,139 @@
+PS C:\Users\caimi\Desktop\CSE515\phase3> python .\task6.py
+Please enter the number of layers L: 4
+Please enter the number of hashes per layer k: 4
+Please enter a vector model (TF/TF-IDF): TF-IDF
+Please pick which feedback model you would like to use
+1. Probabilistic Relevance Feedback
+2. Classifier-based Relevance Feedback
+2
+
+Loading Similarity Matrix and Graph...
+
+Loading gesture vectors...
+Initializing LSH index structure...
+Initializing 4 layers...
+Initializing buckets...
+Initialized LSH index structure.
+Please enter a gesture id (e.g. 1, 249, 559, etc.): 1
+Please enter t: 30
+Searching for candidates...
+Computing distances...
+No. of buckets searched:  4
+No. of unique gestures considered:  620
+Overall no. of gestures considered:  851
+Top 30 most similar gestures:
+1.      1       (distance=0.0)
+2.      1_9     (distance=0.0014312312366598194)
+3.      1_6     (distance=0.0014687193052758355)
+4.      1_8     (distance=0.0015295536199232452)
+5.      1_5     (distance=0.0016602465048618693)
+6.      1_3     (distance=0.001676414649509184)
+7.      1_1     (distance=0.0017242846070072988)
+8.      1_4     (distance=0.0017517416312251113)
+9.      1_2     (distance=0.0017524447837205233)
+10.     1_0     (distance=0.0017593382928712856)
+11.     1_7     (distance=0.0017747114425823458)
+12.     4_6     (distance=0.0020257692466168764)
+13.     11_3    (distance=0.00204132415344792)
+14.     11_2    (distance=0.0020536727795980136)
+15.     4_4     (distance=0.002058357104598675)
+16.     4_2     (distance=0.002066590101819126)
+17.     6_0     (distance=0.0020698926239719998)
+18.     4_3     (distance=0.0021061475033497365)
+19.     11      (distance=0.0021167451533925198)
+20.     6_4     (distance=0.0021259690573575915)
+21.     11_9    (distance=0.0021333421312091606)
+22.     4_0     (distance=0.002135264690101915)
+23.     11_0    (distance=0.002140220899730842)
+24.     4_7     (distance=0.0021412597606659815)
+25.     11_7    (distance=0.0021501941434768634)
+26.     11_1    (distance=0.002152279915909191)
+27.     4_1     (distance=0.002153093536960895)
+28.     4_5     (distance=0.0021560974849790878)
+29.     4_9     (distance=0.00216262579983793)
+30.     11_8    (distance=0.0021691260781402434)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+1
+
+Which gestures do you want to specify as relevant?
+1_9, 1_0, 4_4, 4_2
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+1
+
+Do you want to specify the results as
+1. Relevant
+2. Irrelevant
+
+2
+
+Which gestures do you want to specify as irrelevant?
+11_3, 11_2, 11_1, 11_8
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+2
+Re-Running the Query with Classifier-Based Relevance Feedback
+Relevant:
+['1_9', '1_0', '4_4', '4_2', '1']
+Nonrelevant:
+['11_8', '11_3', '11_2', '11_1']
+Classifier-based relevance feedback:
+1.      1_9     (score=0.0945255683822502)
+2.      1_5     (score=0.09152542372881364)
+3.      1_1     (score=0.08847457627118652)
+4.      1_3     (score=0.0858791284613688)
+5.      1_4     (score=0.08376129756132579)
+6.      4_5     (score=0.061016949152542424)
+7.      4_9     (score=0.05170927894283256)
+8.      4_7     (score=0.05005881452481847)
+9.      4_2     (score=0.04987055864238622)
+10.     4_4     (score=0.04391364970817191)
+11.     1_8     (score=0.04054533572949562)
+12.     1_0     (score=0.030898160431309215)
+13.     1_7     (score=0.028698873564407024)
+14.     4_6     (score=0.028095543052529086)
+15.     4_1     (score=0.021966101694915273)
+16.     1       (score=0.020000000000000004)
+17.     1_6     (score=0.018677033561038645)
+18.     4_3     (score=0.018284370765339383)
+19.     1_2     (score=0.017014602308805037)
+20.     4_0     (score=0.01406778436392256)
+21.     11      (score=0.0)
+22.     11_0    (score=0.0)
+23.     11_1    (score=0.0)
+24.     11_2    (score=0.0)
+25.     11_3    (score=0.0)
+26.     11_7    (score=0.0)
+27.     11_8    (score=0.0)
+28.     11_9    (score=0.0)
+29.     6_0     (score=0.0)
+30.     6_4     (score=0.0)
+
+Pick an option:
+1. Give Feedback
+2. Apply Revelance Feedback
+3. Quit
+
+3
+Quit Chosen
+
+Exiting.
