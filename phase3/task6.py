@@ -7,6 +7,7 @@ from task3_util import load_vector, load_vectors, LSH
 from task4 import *
 from graph_util import *
 from task4 import probabilistic_relev
+from task5 import classifier_relev
 
 working_dir = os.getcwd()
 
@@ -84,6 +85,13 @@ while user_choice != 3:
         # The user picked the classifier based relevance feedback system
         else:
             print("Re-Running the Query with Classifier-Based Relevance Feedback")
+            sorted_gesture_scores = classifier_relev(data_files, similarity_graph, top_t, relevant_gestures, irrelevant_gestures)
+            order = 0
+            print(f'Classifier-based relevance feedback:')
+            for gesture_id, score in sorted_gesture_scores.items():
+                if gesture_id in top_t:
+                    print(f'{order + 1}.\t{gesture_id}\t(score={score})')
+                    order += 1
 
         # Clean up between relevance feedback
         relevant_gestures = []
