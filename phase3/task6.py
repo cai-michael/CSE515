@@ -13,6 +13,7 @@ working_dir = os.getcwd()
 L = int(input('Please enter the number of layers L: '))
 k = int(input('Please enter the number of hashes per layer k: '))
 vector_model = input('Please enter a vector model (TF/TF-IDF): ')
+feedback_model = int(input("Please pick which feedback model you would like to use\n1. Probabilistic Relevance Feedback\n2. Classifier-based Relevance Feedback"))
 
 # Load vectors from vector_data folder
 vectors, vector_ids = load_vectors(vector_model)
@@ -41,8 +42,8 @@ relevant_gestures = []
 irrelevant_gestures = []
 current_weights = None
 user_choice = 0
-while user_choice != 4:
-    print("\nPick an option:\n1. Give Feedback\n2. Apply Probabilistic Revelance Feedback\n3. Classifier-Based Relevance Feedback\n4. Quit\n")
+while user_choice != 3:
+    print("\nPick an option:\n1. Give Feedback\n2. Apply Revelance Feedback\n3. Quit\n")
     user_choice = int(input())
     if user_choice == 1:
         print("\nDo you want to specify the results as \n1. Relevant\n2. Irrelevant")
@@ -57,24 +58,32 @@ while user_choice != 4:
             irrelevant_gestures.extend(feedbackGestures)
             irrelevant_gestures = list(set(irrelevant_gestures))
     elif user_choice == 2:
-        print("Re-Running the Query with Probabilistic Relevance Feedback")
-        current_weights = probabilistic_relev(lsh, vector_model, query, relevant_gestures, irrelevant_gestures, initialWeights=current_weights)
+        # The user picked the probabilistic based relevance feedback system
+        if vector_model == 1:
+            print("Re-Running the Query with Probabilistic Relevance Feedback")
+            current_weights = probabilistic_relev(lsh, vector_model, query, relevant_gestures, irrelevant_gestures, initialWeights=current_weights)
+            
+            distances = []
+            for gesture_id, _ in top_t:
+                index = lsh.vector_ids.index(gesture_id)
+                vector = lsh.vectors[index]
+                distances.append((gesture_id, lsh._distance(query, vector), lsh._weighted_distance(query, vector, current_weights)))
+
+            distances.sort(key=lambda pair: pair[2])
+
+            print(f'Probabilistic Relevance Feedback:')
+            for index, (gesture_id, distance, weighted_distance) in enumerate(distances):
+                print(f'{index + 1}.\t{gesture_id}\t(distance={distance})\t(weighted_distance={weighted_distance})')
         
-        distances = []
-        for gesture_id, _ in top_t:
-            index = lsh.vector_ids.index(gesture_id)
-            vector = lsh.vectors[index]
-            distances.append((gesture_id, lsh._distance(query, vector), lsh._weighted_distance(query, vector, current_weights)))
+        # The user picked the classifier based relevance feedback system
+        else:
+            print("Re-Running the Query with Classifier-Based Relevance Feedback")
 
-        distances.sort(key=lambda pair: pair[2])
-
-        print(f'Probabilistic Relevance Feedback:')
-        for index, (gesture_id, distance, weighted_distance) in enumerate(distances):
-            print(f'{index + 1}.\t{gesture_id}\t(distance={distance})\t(weighted_distance={weighted_distance})')
-
+        # Clean up between relevance feedback
+        relevant_gestures = []
+        irrelevant_gestures = []
+        
     elif user_choice == 3:
-        print("Re-Running the Query with Classifier-Based Relevance Feedback")
-    elif user_choice == 4:
         print("Quit Chosen")
     else:
         print("Invalid User Choice!")
