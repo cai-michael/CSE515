@@ -16,8 +16,7 @@ util.check_folder(working_dir, util.GRAPH_FOLDER)
 data_files, similarity_matrix = util.read_similarity_matrix(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt')
 
 # Create similarity graph
-print('Please specify a desired degree k for the similarity graph:')
-util.DEGREE = int(input())
+util.DEGREE = int(input('Please specify a desired degree k for the similarity graph: '))
 
 util.save_user_settings()
 
@@ -31,8 +30,7 @@ output_file.close()
 
 transition_matrix = create_transition_matrix(similarity_graph)
 
-print('Please specify the number m of dominant gestures to retrieve:')
-num_dominant_gestures = int(input())
+num_dominant_gestures = int(input('Please specify the number m of dominant gestures to retrieve: '))
 num_dominant_gestures = min(num_dominant_gestures, len(data_files))
 
 

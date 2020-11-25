@@ -8,8 +8,7 @@ from task0_util import *
 working_dir = os.getcwd()
 
 # Obtain the name of the gesture folder containing the X, Y, Z, W folders
-print('Please specify the name of the gesture folder:')
-util.CSV_FOLDER = input()
+util.CSV_FOLDER = input('Please specify the name of the gesture folder: ')
 if (len(util.CSV_FOLDER) > 0):
 	if (util.CSV_FOLDER[0] == util.SLASH):
 		util.CSV_FOLDER = util.CSV_FOLDER[1:len(util.CSV_FOLDER)]
@@ -48,13 +47,10 @@ data_files = [f[0:-4] for f in data_files]
 
 
 
-# Obtain RESOLUTION
-print('Please specify a desired resolution r:')
-util.R = int(input())
-print('Please specify a desired window length w:')
-util.W = int(input())
-print('Please specify a desired shift length s:')
-util.S = int(input())
+# Obtain RESOLUTION, WINDOW_SIZE, and SHIFT_LENGTH
+util.R = int(input('Please specify a desired resolution r: '))
+util.W = int(input('Please specify a desired window length w: '))
+util.S = int(input('Please specify a desired shift length s: '))
 print()
 
 
