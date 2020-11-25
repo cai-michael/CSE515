@@ -115,7 +115,7 @@ class LSH:
         return distance
 
     # Find top t vectors most similar to query vector
-    def find_t_most_similar(self, query: List[float], t: int):
+    def find_t_most_similar(self, query: List[float], t: int, use_weights=False, weights=None):
         no_buckets_searched = 0
         overall_no_vectors_considered = 0
         candidates = set()
@@ -131,7 +131,10 @@ class LSH:
         candidates = list(candidates)
         no_unique_vectors_considered = len(candidates)
         print('Computing distances...')
-        distances = [(self.vector_ids[c], self._distance(query, self.vectors[c])) for c in candidates]
+        if use_weights:
+            distances = [(self.vector_ids[c], self._weighted_distance(query, self.vectors[c], weights)) for c in candidates]
+        else:
+            distances = [(self.vector_ids[c], self._distance(query, self.vectors[c])) for c in candidates]
         distances.sort(key=lambda pair: pair[1])
         top_t = distances if len(distances) < t else distances[:t]
         return top_t, no_buckets_searched, no_unique_vectors_considered, overall_no_vectors_considered

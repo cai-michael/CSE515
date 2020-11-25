@@ -1,12 +1,10 @@
 from task3_util import load_vector, load_vectors, LSH
 from pprint import pprint
-from task4 import probabilistic_relev
-
 
 if __name__ == '__main__':
     L = int(input('Please enter the number of layers L: '))
     k = int(input('Please enter the number of hashes per layer k: '))
-    vector_model = input('Please enter a vector model (TF/TF-IDF): ')
+    vector_model = input('Please enter a vector model (TF/TF-IDF): ').upper()
 
     # Load vectors from vector_data folder
     vectors, vector_ids = load_vectors(vector_model)
@@ -34,11 +32,3 @@ if __name__ == '__main__':
     print(f'Top {t} most similar gestures:')
     for index, (gesture_id, distance) in enumerate(top_t):
         print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
-
-
-    # temp until task 6
-    #relevant = int(input())
-    #nonrelevant = int(input())
-    #nonrelevant2 = int(input())
-    #results = [x for x,_ in top_t]
-    #probabilistic_relev(lsh, vector_model, query, results, [results[relevant - 1]], [results[nonrelevant - 1], results[nonrelevant2 - 1]])
