@@ -1,6 +1,6 @@
 from task3_util import load_vector, load_vectors, LSH
 from pprint import pprint
-from task_4 import probabilistic_relev
+from task4 import probabilistic_relev
 
 
 if __name__ == '__main__':

@@ -45,12 +45,15 @@ def probabilistic_relev(lsh, query, results, relevant, nonrelevant):
 
     weights = [0] * T
     for i in range(T):
-        prob_relev = (r[i] + n[i] / N) / (R + 1.0)
-        prob_nonrelev = (z[i] + n[i] / N) / (Z + 1.0)  # assumes nonrelevant documents are defined
-        prob_nonrelev_paper = (n[i] - r[i] + n[i] / N) / (N - R + 1.0)  # assumes nonrelevant documents are all - relevant
+        if r[i] == 0 and n[i] == 0 and z[i] == 0: # The term has never been seen before
+            weights[i] = 0.0
+        else:
+            prob_relev = (r[i] + n[i] / N) / (R + 1.0)
+            prob_nonrelev = (z[i] + n[i] / N) / (Z + 1.0)  # assumes nonrelevant documents are defined
+            prob_nonrelev_paper = (n[i] - r[i] + n[i] / N) / (N - R + 1.0)  # assumes nonrelevant documents are all - relevant
 
-        # print(prob_relev, prob_nonrelev)
-        weights[i] = 1.0 if prob_relev == 1.0 else math.log((prob_relev * (1.0 - prob_nonrelev)) / (prob_nonrelev * (1.0 - prob_relev)))
+            # print(prob_relev, prob_nonrelev)
+            weights[i] = 1.0 if prob_relev == 1.0 else math.log((prob_relev * (1.0 - prob_nonrelev)) / (prob_nonrelev * (1.0 - prob_relev)))
 
 
     # weights = (weights - np.min(weights)) / np.ptp(weights) # [0, 1] normalization
