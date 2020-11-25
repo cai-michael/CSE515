@@ -10,10 +10,11 @@ from task4 import probabilistic_relev
 
 working_dir = os.getcwd()
 
+# Obtain querying inputs
 L = int(input('Please enter the number of layers L: '))
 k = int(input('Please enter the number of hashes per layer k: '))
 vector_model = input('Please enter a vector model (TF/TF-IDF): ')
-feedback_model = int(input("Please pick which feedback model you would like to use\n1. Probabilistic Relevance Feedback\n2. Classifier-based Relevance Feedback"))
+feedback_model = int(input("Please pick which feedback model you would like to use\n1. Probabilistic Relevance Feedback\n2. Classifier-based Relevance Feedback\n"))
 
 # Load vectors from vector_data folder
 vectors, vector_ids = load_vectors(vector_model)
@@ -46,7 +47,7 @@ while user_choice != 3:
     print("\nPick an option:\n1. Give Feedback\n2. Apply Revelance Feedback\n3. Quit\n")
     user_choice = int(input())
     if user_choice == 1:
-        print("\nDo you want to specify the results as \n1. Relevant\n2. Irrelevant")
+        print("\nDo you want to specify the results as \n1. Relevant\n2. Irrelevant\n")
         user_choice = int(input())
         string_choice = "relevant" if user_choice == 1 else "irrelevant"
         inputtedGestures = input(f"\nWhich gestures do you want to specify as {string_choice}?\n")
@@ -59,7 +60,7 @@ while user_choice != 3:
             irrelevant_gestures = list(set(irrelevant_gestures))
     elif user_choice == 2:
         # The user picked the probabilistic based relevance feedback system
-        if vector_model == 1:
+        if feedback_model == 1:
             print("Re-Running the Query with Probabilistic Relevance Feedback")
             current_weights = probabilistic_relev(lsh, vector_model, query, relevant_gestures, irrelevant_gestures, initialWeights=current_weights)
             
@@ -82,12 +83,10 @@ while user_choice != 3:
         # Clean up between relevance feedback
         relevant_gestures = []
         irrelevant_gestures = []
-        
+
     elif user_choice == 3:
         print("Quit Chosen")
     else:
         print("Invalid User Choice!")
 print("\nExiting.")
-        
-    
     
