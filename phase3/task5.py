@@ -29,8 +29,10 @@ data_files, similarity_matrix = util.read_similarity_matrix(working_dir + util.S
 similarity_graph = util.read_similarity_graph(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_graph.txt')
 
 # remove irrelevant gestures from similarity_graph
-for gesture in range(len(irrelevant_gestures)):
-    similarity_graph.pop(gesture, None)
+for gesture in irrelevant_gestures:
+    for g in similarity_graph:
+        if gesture in similarity_graph[g]:
+            similarity_graph[g].pop(similarity_graph[g].index(gesture))
 
 # Build transition matrix
 transition_matrix = create_transition_matrix(similarity_graph)
