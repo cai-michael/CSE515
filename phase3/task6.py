@@ -3,32 +3,52 @@ import os
 import numpy as np
 import general_util as util
 from task2_util import *
+from task3_util import load_vector, load_vectors, LSH
 from graph_util import *
 
 working_dir = os.getcwd()
 
-# list of the names of all gestures in the database
-data_files = util.get_files(util.WRD_FOLDER,'.wrd')
-data_files = [a[0:-4] for a in data_files] # strip file extension
+L = int(input('Please enter the number of layers L: '))
+k = int(input('Please enter the number of hashes per layer k: '))
+vector_model = input('Please enter a vector model (TF/TF-IDF): ')
+feedbackModel = input('Please choose a feedback system to utilize:\n1. Probabilistic Relevance Feedback\n2. Classifier-Based Relevance Feedback')
 
-# Get user input 
-print('Please select the gesture to use a query object')
-queryGesture = input()
+# Load vectors from vector_data folder
+vectors, vector_ids = load_vectors(vector_model)
 
-while queryGesture not in data_files:
-    print('Invalid gesture selected please select a valid gesture')
-    queryGesture = input()
+# Initialize LSH index structure
+lsh = LSH(L, k, vectors, vector_ids)
 
-print('How many gestures should be returned?')
-numToReturn = int(input())
+gesture_id = input('Please enter a gesture id (e.g. 1, 249, 559, etc.): ')
 
-# Do Something Here to Find Relevant Gestures
+t = int(input('Please enter t: '))
 
+query = load_vector(vector_model, gesture_id)
+
+# Find t most similar gestures
+top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
+
+print('No. of buckets searched: ', no_buckets)
+print('No. of unique gestures considered: ', no_unique)
+print('Overall no. of gestures considered: ', overall_no)
+
+print(f'Top {t} most similar gestures:')
+for index, (gesture_id, distance) in enumerate(top_t):
+    print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
+    
 user_choice = 0
 while user_choice != 3:
     print("Displaying Relevant Gestures")
-    for idx, gesture in enumerate(relevantGestures, 1):
-        print(f"{idx}. {gesture}")
+    # Find t most similar gestures
+    
+
+    print('No. of buckets searched: ', no_buckets)
+    print('No. of unique gestures considered: ', no_unique)
+    print('Overall no. of gestures considered: ', overall_no)
+
+    print(f'Top {t} most similar gestures:')
+    for index, (gesture_id, distance) in enumerate(top_t):
+        print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
     print("\nPick an option:\n1. Give Feedback\n2. Re-run Query\n3. Quit\n")
     user_choice = input()
     if user_choice == 1:
@@ -37,7 +57,7 @@ while user_choice != 3:
         print("\nOn a scale from 1-5 how relevant is this gesture with 5 being very relevant and 1 being completely irrelevant?")
     elif user_choice == 2:
         print("Re-Running the Query with the new feedback...")
-        # TODO: Re-run the query with new parameters
+        top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
     elif user_choice == 3:
         print("Quit Chosen")
     else:
