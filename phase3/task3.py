@@ -1,5 +1,6 @@
 from task3_util import load_vector, load_vectors, LSH
 from pprint import pprint
+from task_4 import probabilistic_relev
 
 
 if __name__ == '__main__':
@@ -31,3 +32,8 @@ if __name__ == '__main__':
     print(f'Top {t} most similar gestures:')
     for index, (gesture_id, distance) in enumerate(top_t):
         print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
+
+
+    # temp until task 6
+    results = [x for x,_ in top_t]
+    probabilistic_relev(lsh, query, results, [results[6]], [results[2], results[3]])
