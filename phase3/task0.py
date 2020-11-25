@@ -1,5 +1,6 @@
 import os
-import copy
+#import copy
+import math
 import numpy as np
 import general_util as util
 from task0_util import *
@@ -145,14 +146,37 @@ print('Finished.\n')
 
 
 
+print('What metric would you like to use for the gesture-gesture similarity matrix?')
+print('0: dot product')
+print('1: negative Euclidean distance')
+choice = int(input())
+
 print('Computing gesture-gesture similarity matrix...')
 util.check_folder(working_dir, util.GRAPH_FOLDER)
 
-# computes the similarity matrix using dot product
-similarity_matrix = [list(tfidf[f].values()) for f in data]
-similarity_matrix = np.matrix(similarity_matrix)
-similarity_matrix = np.matmul(similarity_matrix, similarity_matrix.transpose())
-similarity_matrix = similarity_matrix.tolist()
+data_matrix = [list(tfidf[f].values()) for f in data]
+data_matrix = np.matrix(data_matrix)
+num_gestures, num_dimensions = np.shape(data_matrix)
+
+similarity_matrix = []
+if (choice == 0): # computes the similarity matrix using dot product
+	similarity_matrix = np.matmul(data_matrix, data_matrix.transpose())
+	similarity_matrix = similarity_matrix.tolist()
+elif (choice == 1): # computes the similarity matrix using negative Euclidean distance
+	for ind in range(num_gestures):
+		one_vector = np.ones((num_gestures,1))
+		gesture_vector = data_matrix[ind,:]
+		distances = np.matmul(one_vector, gesture_vector)
+		
+		distances = np.subtract(distances, data_matrix)
+		distances = np.multiply(distances, distances)
+		
+		one_vector = np.ones((num_dimensions,1))
+		distances = np.matmul(distances, one_vector)
+		distances = distances.transpose().tolist()[0]
+		distances = [-math.sqrt(d) for d in distances]
+		
+		similarity_matrix.append(distances)
 
 output_file = open(working_dir + util.SLASH + util.GRAPH_FOLDER + util.SLASH + 'similarity_matrix.txt','w')
 output_file.write(str(list(data.keys())).replace(' ','').replace("'",'')[1:-1]+'\n')

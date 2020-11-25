@@ -106,6 +106,14 @@ class LSH:
         distance = sum([abs(c1 - c2) ** s for c1, c2 in zip(v1, v2)]) ** (1 / s)
         return distance
 
+    def _weighted_distance(self, v1: List[float], v2: List[float], weights: List[float]) -> float:
+        s = self.s
+        distance = 0.0
+        for i in range(len(v1)):
+            distance += (abs(v1[i] - v2[i]) * weights[i]) ** s
+        distance = distance ** (1 / s)
+        return distance
+
     # Find top t vectors most similar to query vector
     def find_t_most_similar(self, query: List[float], t: int):
         no_buckets_searched = 0
