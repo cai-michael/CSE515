@@ -55,16 +55,9 @@ def probabilistic_relev(lsh, vector_model, query, results, relevant, nonrelevant
             # print(prob_relev, prob_nonrelev)
             weights[i] = 1.0 if prob_relev == 1.0 else math.log((prob_relev * (1.0 - prob_nonrelev)) / (prob_nonrelev * (1.0 - prob_relev)))
 
-
-    # weights = (weights - np.min(weights)) / np.ptp(weights) # [0, 1] normalization
-
-    # weights /= np.linalg.norm(weights) # magnitude 1 normalization
-    # weights += 1
-
-    # weights = [1.0] * T # no weights
-
-    # print(weights)
-
+    return weights
+    
+    """
     distances = []
     for gesture_id in results:
         index = lsh.vector_ids.index(gesture_id)
@@ -76,5 +69,6 @@ def probabilistic_relev(lsh, vector_model, query, results, relevant, nonrelevant
     print(f'Probabilistic Relevance Feedback:')
     for index, (gesture_id, distance, weighted_distance) in enumerate(distances):
         print(f'{index + 1}.\t{gesture_id}\t(distance={distance})\t(weighted_distance={weighted_distance})')
+    """
 
 

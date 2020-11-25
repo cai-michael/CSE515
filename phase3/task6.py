@@ -4,6 +4,7 @@ import numpy as np
 import general_util as util
 from task2_util import *
 from task3_util import load_vector, load_vectors, LSH
+from task4 import *
 from graph_util import *
 
 working_dir = os.getcwd()
@@ -27,21 +28,11 @@ query = load_vector(vector_model, gesture_id)
 
 # Find t most similar gestures
 top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
-
-print('No. of buckets searched: ', no_buckets)
-print('No. of unique gestures considered: ', no_unique)
-print('Overall no. of gestures considered: ', overall_no)
-
-print(f'Top {t} most similar gestures:')
-for index, (gesture_id, distance) in enumerate(top_t):
-    print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
     
+relevantResults = []
+irrelevantResults = []
 user_choice = 0
 while user_choice != 3:
-    print("Displaying Relevant Gestures")
-    # Find t most similar gestures
-    
-
     print('No. of buckets searched: ', no_buckets)
     print('No. of unique gestures considered: ', no_unique)
     print('Overall no. of gestures considered: ', overall_no)
@@ -49,15 +40,31 @@ while user_choice != 3:
     print(f'Top {t} most similar gestures:')
     for index, (gesture_id, distance) in enumerate(top_t):
         print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
+
     print("\nPick an option:\n1. Give Feedback\n2. Re-run Query\n3. Quit\n")
-    user_choice = input()
+    user_choice = int(input())
     if user_choice == 1:
-        print("\nSelect the result to give feedback on")
-        chosenGesture = input()
-        print("\nOn a scale from 1-5 how relevant is this gesture with 5 being very relevant and 1 being completely irrelevant?")
+        print("\nDo you want to specify the results as \n1. Relevant or \n2. Irrelevant")
+        user_choice = int(input())
+        string_choice = "relevant" if user_choice == 1 else "irrelevant"
+        inputtedGestures = input(f"\nWhich gestures do you want to specify as {string_choice}?")
+        feedbackGestures = inputtedGestures.replace(' ', '').split(',')
+        if user_choice == 1:
+            relevantResults.extend(feedbackGestures)
+            relevantResults = list(set(relevantResults))
+        else:
+            irrelevantResults.extend(feedbackGestures)
+            irrelevantResults = list(set(relevantResults))
     elif user_choice == 2:
         print("Re-Running the Query with the new feedback...")
-        top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
+        if feedbackModel == 1:
+            newWeights = probabilistic_relev(lsh, vector_model, query, results, [results[relevant - 1]], [results[nonrelevant - 1], results[nonrelevant2 - 1]])
+            top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t, use_weights=False, weights=newWeights)
+        else:
+            
+        
+        relevantResults = []
+        irrelevantResults = []
     elif user_choice == 3:
         print("Quit Chosen")
     else:
