@@ -32,16 +32,17 @@ print('No. of buckets searched: ', no_buckets)
 print('No. of unique gestures considered: ', no_unique)
 print('Overall no. of gestures considered: ', overall_no)
 
+top_t_gestures = []
 print(f'Top {t} most similar gestures:')
 for index, (gesture_id, distance) in enumerate(top_t):
     print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
+    top_t_gestures.append(gesture_id)
     
 user_choice = 0
-while user_choice != 3:
+while user_choice != 4:
     print("Displaying Relevant Gestures")
     # Find t most similar gestures
     
-
     print('No. of buckets searched: ', no_buckets)
     print('No. of unique gestures considered: ', no_unique)
     print('Overall no. of gestures considered: ', overall_no)
@@ -49,16 +50,20 @@ while user_choice != 3:
     print(f'Top {t} most similar gestures:')
     for index, (gesture_id, distance) in enumerate(top_t):
         print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
-    print("\nPick an option:\n1. Give Feedback\n2. Re-run Query\n3. Quit\n")
+    print("\nPick an option:\n1. Give Feedback\n2. Apply Probabilistic Revelance Feedback\n3. PPR Relevance Feedback\n4. Quit\n")
     user_choice = input()
     if user_choice == 1:
-        print("\nSelect the result to give feedback on")
-        chosenGesture = input()
-        print("\nOn a scale from 1-5 how relevant is this gesture with 5 being very relevant and 1 being completely irrelevant?")
+        print('Which gestures would you like to list as relevant? (e.g. 1, 249, 559, etc.):')
+        relevant_gestures = input().replace(' ', '').split(',')
+        print('Which gestures would you like to list as irrelevant? (e.g. 2, 258, 537, etc.):')
+        irrelevant_gestures = input().replace(' ', '').split(',')
     elif user_choice == 2:
         print("Re-Running the Query with the new feedback...")
-        top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
+        #call function for task4
     elif user_choice == 3:
+        print("Re-Running the Query with the new feedback...")
+        #call function for task5
+    elif user_choice == 4:
         print("Quit Chosen")
     else:
         print("Invalid User Choice!")
