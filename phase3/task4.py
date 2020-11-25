@@ -3,7 +3,7 @@ import numpy as np
 
 from task3_util import load_vectors
 
-def probabilistic_relev(lsh, vector_model, query, relevant, nonrelevant):
+def probabilistic_relev(lsh, vector_model, query, relevant, nonrelevant, initialWeights = None):
     # print(results)
     print('Relevant: ')
     print(relevant)
@@ -55,20 +55,9 @@ def probabilistic_relev(lsh, vector_model, query, relevant, nonrelevant):
             # print(prob_relev, prob_nonrelev)
             weights[i] = 1.0 if prob_relev == 1.0 else math.log((prob_relev * (1.0 - prob_nonrelev)) / (prob_nonrelev * (1.0 - prob_relev)))
 
-    return weights
-    
-    """
-    distances = []
-    for gesture_id in results:
-        index = lsh.vector_ids.index(gesture_id)
-        vector = lsh.vectors[index]
-        distances.append((gesture_id, lsh._distance(query, vector), lsh._weighted_distance(query, vector, weights)))
-
-    distances.sort(key=lambda pair: pair[2])
-
-    print(f'Probabilistic Relevance Feedback:')
-    for index, (gesture_id, distance, weighted_distance) in enumerate(distances):
-        print(f'{index + 1}.\t{gesture_id}\t(distance={distance})\t(weighted_distance={weighted_distance})')
-    """
+    if initialWeights == None:
+        return weights
+    else:
+        return [(initialWeights[i] + weights[i]) / 2 for i in range(len(initialWeights))]
 
 

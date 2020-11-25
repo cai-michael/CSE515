@@ -132,9 +132,9 @@ class LSH:
         no_unique_vectors_considered = len(candidates)
         print('Computing distances...')
         if use_weights:
-            distances = [(self.vector_ids[c], self._distance(query, self.vectors[c])) for c in candidates]
-        else:
             distances = [(self.vector_ids[c], self._weighted_distance(query, self.vectors[c], weights)) for c in candidates]
+        else:
+            distances = [(self.vector_ids[c], self._distance(query, self.vectors[c])) for c in candidates]
         distances.sort(key=lambda pair: pair[1])
         top_t = distances if len(distances) < t else distances[:t]
         return top_t, no_buckets_searched, no_unique_vectors_considered, overall_no_vectors_considered

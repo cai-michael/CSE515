@@ -28,26 +28,27 @@ query = load_vector(vector_model, gesture_id)
 
 # Find t most similar gestures
 top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t)
+
+print('No. of buckets searched: ', no_buckets)
+print('No. of unique gestures considered: ', no_unique)
+print('Overall no. of gestures considered: ', overall_no)
+
+print(f'Top {t} most similar gestures:')
+for index, (gesture_id, distance) in enumerate(top_t):
+    print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
     
 relevant_gestures = []
 irrelevant_gestures = []
+current_weights = None
 user_choice = 0
-while user_choice != 3:
-    print('No. of buckets searched: ', no_buckets)
-    print('No. of unique gestures considered: ', no_unique)
-    print('Overall no. of gestures considered: ', overall_no)
-
-    print(f'Top {t} most similar gestures:')
-    for index, (gesture_id, distance) in enumerate(top_t):
-        print(f'{index + 1}.\t{gesture_id}\t(distance={distance})')
-
+while user_choice != 4:
     print("\nPick an option:\n1. Give Feedback\n2. Apply Probabilistic Revelance Feedback\n3. Classifier-Based Relevance Feedback\n4. Quit\n")
     user_choice = int(input())
     if user_choice == 1:
-        print("\nDo you want to specify the results as \n1. Relevant or \n2. Irrelevant")
+        print("\nDo you want to specify the results as \n1. Relevant\n2. Irrelevant")
         user_choice = int(input())
         string_choice = "relevant" if user_choice == 1 else "irrelevant"
-        inputtedGestures = input(f"\nWhich gestures do you want to specify as {string_choice}?")
+        inputtedGestures = input(f"\nWhich gestures do you want to specify as {string_choice}?\n")
         feedbackGestures = inputtedGestures.replace(' ', '').split(',')
         if user_choice == 1:
             relevant_gestures.extend(feedbackGestures)
@@ -57,8 +58,20 @@ while user_choice != 3:
             irrelevant_gestures = list(set(irrelevant_gestures))
     elif user_choice == 2:
         print("Re-Running the Query with Probabilistic Relevance Feedback")
-        newWeights = probabilistic_relev(lsh, vector_model, query, relevant_gestures, irrelevant_gestures)
-        top_t, no_buckets, no_unique, overall_no = lsh.find_t_most_similar(query, t, use_weights=False, weights=newWeights)
+        current_weights = probabilistic_relev(lsh, vector_model, query, relevant_gestures, irrelevant_gestures, initialWeights=current_weights)
+        
+        distances = []
+        for gesture_id, _ in top_t:
+            index = lsh.vector_ids.index(gesture_id)
+            vector = lsh.vectors[index]
+            distances.append((gesture_id, lsh._distance(query, vector), lsh._weighted_distance(query, vector, current_weights)))
+
+        distances.sort(key=lambda pair: pair[2])
+
+        print(f'Probabilistic Relevance Feedback:')
+        for index, (gesture_id, distance, weighted_distance) in enumerate(distances):
+            print(f'{index + 1}.\t{gesture_id}\t(distance={distance})\t(weighted_distance={weighted_distance})')
+
     elif user_choice == 3:
         print("Re-Running the Query with Classifier-Based Relevance Feedback")
     elif user_choice == 4:
