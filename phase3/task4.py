@@ -3,14 +3,14 @@ import numpy as np
 
 from task3_util import load_vectors
 
-def probabilistic_relev(lsh, query, results, relevant, nonrelevant):
+def probabilistic_relev(lsh, vector_model, query, results, relevant, nonrelevant):
     # print(results)
     print('Relevant: ')
     print(relevant)
     print('Nonrelevant: ')
     print(nonrelevant)
 
-    vectors, gesture_ids = load_vectors('TF')
+    vectors, gesture_ids = load_vectors(vector_model)
     threshold = .001  # minimum term frequency for a term to be counted as part of the document
 
     T = len(vectors[0])  # number of terms

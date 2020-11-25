@@ -35,5 +35,8 @@ if __name__ == '__main__':
 
 
     # temp until task 6
-    results = [x for x,_ in top_t]
-    probabilistic_relev(lsh, query, results, [results[6]], [results[2], results[3]])
+    #relevant = int(input())
+    #nonrelevant = int(input())
+    #nonrelevant2 = int(input())
+    #results = [x for x,_ in top_t]
+    #probabilistic_relev(lsh, vector_model, query, results, [results[relevant - 1]], [results[nonrelevant - 1], results[nonrelevant2 - 1]])
